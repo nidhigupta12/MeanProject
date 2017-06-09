@@ -1,0 +1,26 @@
+<navigation></navigation>
+<div class="container">
+    <div class="row loginPanel">
+      <div class="registerContainer col-sm-4 col-sm-offset-4 col-xs-12">
+      <h2 class="form-signin-heading">Please sign in</h2>
+      <form name= "form" class="form-signin" autocomplete="off"
+                  ng-submit="vm.login()">
+       <label for="inputEmail" class="sr-only">Email address</label>
+       <input type="email" autocomplete="false" id ="email"
+              class="form-control" placeholder="Email address" required
+        autofocus ng-model="vm.credentials.email"/>
+       <label for="inputPassword" class="sr-only">Password</label>
+       <input type="password" autocomplete="false" id ="inputPassword"
+                  class="form-control" placeholder="Password"
+        required ng-model="vm.credentials.password"/>
+       <div class="form-group form-inline">
+        <h3>{{vm.errorMsg.message}}</h3>
+         <button class="btn btn-lg btn-primary btn-block"
+          type="submit">Sign in</button>
+       </div>
+     </form>
+
+    </div>
+
+    </div>
+   </div>

@@ -1,0 +1,61 @@
+<navigation></navigation>
+<div class="container">
+<div class="row loginPanel">
+<div class="registerContainer col-sm-4 col-sm-offset-4 col-xs-12">
+  <!--<div> <h1 class="loginHeader">Sign Up !</h1> </div>-->
+    <div>
+      <form class="form" name="form" novalidate>
+        <div class="form-group">
+       <!-- <label for="firstName">First name</label> -->
+        <input type="text" id="name" class="form-control"
+        ng-model="vm.credentials.name"
+        required placeholder="Name" />
+        </div>
+        <div class="form-group" >
+          <input type="email" name="email" class="form-control formElements"
+           ng-model="vm.credentials.email" placeholder="Email"  />
+        </div>
+
+        <div class="form-group">
+          <input type="password" name="password"
+          class="form-control formElements"
+          ng-model="vm.credentials.password" ng-minlength="3"
+          required placeholder="Password"/>
+                      <!-- <p class="has-error"
+                         ng-show="loginFailed">
+                        Authentication Failed.
+                      </p>
+                      <p class="help-block" ng-show="form.password.$error.mongoose">
+
+                      </p> -->
+        </div>
+        <div class="form-group">
+          <textarea class="form-control formElements"
+          ng-model="vm.credentials.address" placeholder="Mailing Address">
+          </textarea>
+        </div>
+<div class="form-group">
+          <select  ng-model="vm.credentials.role"
+          class="form-control formElements">
+              <option selected disabled hidden value="">Choose Role</option>
+              <option value="100">Applicant</option>
+              <option value="200">Issuing Bank</option>
+              <option value="300">Advsing Bank</option>
+              <option value="400">Beneficiary</option>
+          </select>
+        </div>
+        <div class="form-group">
+        <button class="btn btn-inverse btn-lg btn-login" type="submit"
+            ng-click="vm.submit()">
+              Register
+        </button>
+        <button class="btn btn-inverse btn-lg btn-login" type="cancel"
+         ng-click="vm.clear()">
+                     Clear
+        </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

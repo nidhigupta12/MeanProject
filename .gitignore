@@ -1,0 +1,6 @@
+node_modules
+.tern-project
+client/lib
+\.node*
+property.js
+server/uploadedFiles

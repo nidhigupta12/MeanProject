@@ -1,0 +1,36 @@
+{
+  "name": "trade-finance-app",
+  "description": "Trade Finance Application with Ethereum Blockchain",
+  "main": "app.js",
+  "authors": [
+    "Deloitte Consulting LLC"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "Blockchain",
+    "Ethereum",
+    "IPFS",
+    "MongoDb"
+  ],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "angular": "^1.6.1",
+    "angular-animate": "^1.6.1",
+    "angular-ui-router": "0.3.2",
+    "bootstrap": "^3.3.7",
+    "ng-file-upload": "^12.2.13",
+    "angularjs-datepicker": "^2.1.13",
+    "angular-moment": "^1.0.1",
+    "moment-timezone": "^0.5.11",
+    "web3": "^0.18.4"
+  }
+}

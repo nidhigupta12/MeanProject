@@ -1,0 +1,436 @@
+<navigation></navigation>
+<div class="container">
+  <div class="row loginPanel">
+	<div>
+        <ul id="myTab" class="nav nav-tabs">
+          <li  class="active" ng-class="vm.setTab(0)"><a data-target="#acceptLodgement" data-toggle="tab">Accept Lodgement</a></li>
+		  <!--<li ng-class="vm.setTab(1)"><a data-target="#acceptLodgement" data-toggle="tab">Accept Lodgement</a></li>-->
+        </ul>
+    </div>
+	<div class="tab-content">
+		<div  ng-class="vm.setTab(0)" class="active tab-pane col-sm-12 col-xs-12" id="acceptLC">
+			<form>
+				<div class="col-sm-6 col-xs-12" >
+					&nbsp;
+					<div class="form-group">
+						<label>LC Number</label>
+						<select class="form-control" ng-change='vm.fetchDetail(acptLdgmentFormDetails)' ng-model="acptLdgmentFormDetails" ng-options="item.lcNumber for item in acptLdgmentLCList">
+							  <option value="" disabled>- Select LC Number-</option>
+						</select>
+					</div>
+				</div>
+
+
+				<div class="col-sm-12 col-xs-12" >
+
+          <a ng-show="vm.showAccordion" id="collapse-init" href="javascript:void(0)">
+              Expand All
+          </a>
+				  <div ng-show="vm.showAccordion" class="row panel-group" id="accordion">
+
+
+						<div class="panel panel-default">
+						<div class="panel-heading" data-toggle="collapse" data-parent="#accordion" data-target="#collapse1">
+							<h4 class="panel-title">
+									Presenting Bank Details
+                    <i class="more-less glyphicon glyphicon-plus"></i>
+							</h4>
+						</div>
+						<div id="collapse1" class="panel-collapse collapse">
+						  <div class="panel-body">
+								<div class="col-sm-12 col-xs-12">
+
+										 <table class="table table-striped">
+											<thead>
+												<tr>
+													<th>Presenting Bank Name </th>
+                          	<th>Presenting Bank Branch </th>
+													<th>Presenting Bank Address </th>
+													<th>Lodgement Accepted Date </th>
+												 </tr>
+											 </thead>
+											 <tbody>
+												<tr>
+													<td>{{acptLdgmentFormDetails.presentingBankId.name}}</td>
+                          <td>{{acptLdgmentFormDetails.presentingBankId.branch}}</td>
+													<td>{{acptLdgmentFormDetails.presentingBankId.address}}</td>
+													<td>{{acptLdgmentFormDetails.workflows[9].createdDateUTC | date: 'dd-MM-yyyy hh:mm:ss' : 'UTC' }}
+														<span ng-if="acptLdgmentFormDetails.workflows[9].createdDateUTC " >
+															UTC
+														</span>
+													</td>
+												</tr>
+                        <tr>
+                          <td colspan="4"> &nbsp;</td>
+                        </tr>
+											</tbody>
+											</table>
+
+								</div>
+							</div>
+					   </div>
+					</div>
+
+
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title" data-toggle="collapse" data-target="#collapse2">
+									Advising Bank Details
+                    <i class="more-less glyphicon glyphicon-plus"></i>
+							</h4>
+						</div>
+						<div id="collapse2" class="panel-collapse collapse">
+						  <div class="panel-body">
+								<div class="col-sm-12 col-xs-12">
+
+										 <table class="table table-striped">
+											<thead>
+												<tr>
+													<th>Advising Bank Name </th>
+                          <th>Advising Bank Branch </th>
+													<th>Advising Bank Address </th>
+													<th>LC Accepted Date </th>
+												 </tr>
+											 </thead>
+											 <tbody>
+												<tr>
+													<td>{{acptLdgmentFormDetails.advisingBankId.name}}</td>
+                          <td>{{acptLdgmentFormDetails.advisingBankId.branch}}</td>
+													<td>{{acptLdgmentFormDetails.advisingBankId.address}}</td>
+													<td>{{acptLdgmentFormDetails.workflows[5].createdDateUTC | date: 'dd-MM-yyyy hh:mm:ss' : 'UTC' }}
+														<span ng-if="acptLdgmentFormDetails.workflows[9].createdDateUTC " >
+															UTC
+														</span>
+													</td>
+												</tr>
+                        <tr>
+                          <td colspan="4"> &nbsp;</td>
+                        </tr>
+											</tbody>
+											</table>
+
+								</div>
+							</div>
+					   </div>
+					</div>
+
+
+
+					<div class="panel panel-default">
+						<div class="panel-heading" data-toggle="collapse" data-target="#collapse3">
+						  <h4 class="panel-title">
+								Applicant / Beneficiary details
+                <i class="more-less glyphicon glyphicon-plus"></i>
+						  </h4>
+						</div>
+							<div id="collapse3" class="panel-collapse collapse">
+							  <div class="panel-body">
+								<table class="table table-striped">
+									<thead>
+									<tr>
+										<th style="width:25%">Applicant Name</th>
+                    <th style="width:25%">Applicant Account Number</th>
+										<th style="width:25%">Beneficiary Name</th>
+                    <th style="width:25%">Beneficiary Account Number</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td style="width:25%">{{acptLdgmentFormDetails.buyerId.name}}</td>
+                    <td style="width:25%">{{acptLdgmentFormDetails.buyerId.accountDetail.accountNo}}</td>
+										<td style="width:25%">{{acptLdgmentFormDetails.sellerId.name}}</td>
+                    <td style="width:25%">{{acptLdgmentFormDetails.sellerId.accountDetail.accountNo}}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="5"> &nbsp;</td>
+                  </tr>
+
+									</tbody>
+
+                  <thead>
+                  <tr>
+										<th colspan="2">Applicant Address</th>
+										<th colspan="2">Beneficiary Address</th>
+									</tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td colspan="2">{{acptLdgmentFormDetails.buyerId.address}}</td>
+                  <td colspan="2">{{acptLdgmentFormDetails.sellerId.address}}</td>
+                </tr>
+                <tr>
+                  <td colspan="4"> &nbsp;</td>
+                </tr>
+                </tbody>
+
+
+
+								</table>
+							  </div>
+						</div>
+					</div>
+
+				  <div class="panel panel-default">
+						<div class="panel-heading"  data-toggle="collapse" data-target="#collapse4">
+						  <h4 class="panel-title">
+							Description of Goods and/or Services
+                <i class="more-less glyphicon glyphicon-plus"></i>
+						  </h4>
+						</div>
+						<div id="collapse4" class="panel-collapse collapse">
+						  <div class="panel-body">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th style="width:20%">PO Number</th>
+										<th style="width:20%">PO Item</th>
+										<th style="width:20%">PO Value</th>
+										<th style="width:20%">PO Quantity</th>
+										<th style="width:20%">PO Date</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>{{acptLdgmentFormDetails.poNumber}}</td>
+										<td>{{acptLdgmentFormDetails.poItem}}</td>
+										<td>
+											<span ng-if="acptLdgmentFormDetails.poValue>0" >{{acptLdgmentFormDetails.poCurrency}}&nbsp;</span>
+											{{acptLdgmentFormDetails.poValue| number:2}}
+										</td>
+										<td>{{acptLdgmentFormDetails.poQuantity| number}}</td>
+										<td>{{acptLdgmentFormDetails.poInitDate | date: 'dd-MM-yyyy hh:mm:ss' : 'UTC'}}
+											<span ng-if="acptLdgmentFormDetails.poInitDate" >
+												UTC
+											</span>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="5"> &nbsp;</td>
+									</tr>
+								</tbody>
+								<thead>
+									<tr>
+										<th>LC Duration</th>
+										<th>Percentage Credit Amount Tolerance</th>
+										<th>Usance Period</th>
+										<th>LC Fee </th>
+                    <th>LC Expiry Date</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td >{{acptLdgmentFormDetails.lcDuration}}
+											<span ng-if="acptLdgmentFormDetails.lcDuration>0">Days</span>
+										</td>
+										<td >{{acptLdgmentFormDetails.tolerancePercent}}
+											<span ng-if="acptLdgmentFormDetails.tolerancePercent>0" >%</span>
+										</td>
+										<td >{{acptLdgmentFormDetails.usancePeriod}}
+											<span ng-if="acptLdgmentFormDetails.usancePeriod>0">Days From Date Of</span>
+                      {{acptLdgmentFormDetails.usancePeriodFrom }}
+										</td>
+										<td >{{acptLdgmentFormDetails.poCurrency}}&nbsp;
+											{{acptLdgmentFormDetails.lcCreationFee| number : 2}}
+										</td>
+                    <td>{{acptLdgmentFormDetails.lcExpirationDate | date: 'dd-MM-yyyy hh:mm:ss' : 'UTC' }}
+                        <span ng-if="acptLdgmentFormDetails.lcExpirationDate" >
+                          UTC
+                        </span>
+                      </td>
+									</tr>
+									<tr>
+										<td colspan="4"> &nbsp;</td>
+									</tr>
+								</tbody>
+								<thead>
+									<tr>
+										<th >Bill Number</th>
+										<th >Bill Quantity</th>
+										<th >Bill Amount</th>
+										<th >Bill of Lading</th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>{{acptLdgmentFormDetails.billNumber}}</td>
+										<td>{{acptLdgmentFormDetails.billQuantity| number}}</td>
+										<td>{{acptLdgmentFormDetails.poCurrency}}&nbsp;
+											{{acptLdgmentFormDetails.billAmount| number : 2}}
+										</td>
+										<td>{{acptLdgmentFormDetails.billLading}}</td>
+
+									</tr>
+                  <tr>
+                    <td colspan="4"> &nbsp;</td>
+                  </tr>
+								</tbody>
+							</table>
+						  </div>
+						</div>
+					  </div>
+
+            <!-- Issuing Bank Detail : Start -->
+            <div class="panel panel-default">
+              <div class="panel-heading" data-toggle="collapse" data-target="#collapse8">
+                <h4 class="panel-title">
+                    Issuing Bank Details
+                      <i class="more-less glyphicon glyphicon-plus"></i>
+                </h4>
+              </div>
+              <div id="collapse8" class="panel-collapse collapse">
+                <div class="panel-body">
+                  <div class="col-sm-12 col-xs-12">
+
+                       <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>Issuing Bank Name </th>
+                              <th>Issuing Bank Branch </th>
+                            <th>Issuing Bank Address </th>
+                            <th>LC Initiated Date </th>
+                           </tr>
+                         </thead>
+                         <tbody>
+                          <tr>
+                            <td>{{acptLdgmentFormDetails.issuingBankId.name}}</td>
+                              <td>{{acptLdgmentFormDetails.issuingBankId.branch}}</td>
+                            <td>{{acptLdgmentFormDetails.issuingBankId.address}}</td>
+                            <td>{{acptLdgmentFormDetails.workflows[3].createdDateUTC | date: 'dd-MM-yyyy hh:mm:ss' : 'UTC' }}
+  														<span ng-if="acptLdgmentFormDetails.workflows[9].createdDateUTC " >
+  															UTC
+  														</span>
+  													</td>
+                          </tr>
+                          <tr>
+                            <td colspan="4"> &nbsp;</td>
+                          </tr>
+                        </tbody>
+                        </table>
+
+                  </div>
+                </div>
+               </div>
+            </div>
+            <!-- Issuing Bank Detail : End  -->
+
+
+            <!-- Document Required  Start-->
+            <div class="panel panel-default">
+                <div class="panel-heading" data-target="#collapse7" data-toggle="collapse">
+                    <h4 class="panel-title">
+                                Documents Required
+                                <i class="more-less glyphicon glyphicon-plus"></i>
+                    </h4>
+                </div>
+                <div id="collapse7" class="panel-collapse collapse">
+                    <div class="panel-body">
+                      <table class="table table-striped">
+                      <tbody>
+                          <tr>
+                              <td colspan="4"><pre>{{acptLdgmentFormDetails.lcDocsRequired}}</pre></td>
+                          </tr>
+                          <tr>
+                              <td colspan="4">&nbsp;</td>
+                          </tr>
+                      </tbody>
+                      </table>
+                    </div>
+                </div>
+              </div>
+            <!-- Document Required End-->
+            <!-- MT 700  Start-->
+            <div class="panel panel-default">
+                <div class="panel-heading" data-target="#collapse6" data-toggle="collapse">
+                    <h4 class="panel-title">
+                                MT 700 - Other Fields
+                                <i class="more-less glyphicon glyphicon-plus"></i>
+                    </h4>
+                </div>
+                <div id="collapse6" class="panel-collapse collapse">
+                    <div class="panel-body">
+                      <table class="table table-striped">
+                      <tbody>
+                          <tr>
+                              <td colspan="4"><pre>{{acptLdgmentFormDetails.termsCondition}}</pre></td>
+                          </tr>
+                          <tr>
+                              <td colspan="4">&nbsp;</td>
+                          </tr>
+                      </tbody>
+                      </table>
+                    </div>
+                </div>
+              </div>
+            <!-- MT 700 End-->
+
+
+
+					  <!-- DIV for Files -->
+					 <div class="panel panel-default">
+						<div class="panel-heading" data-target="#collapse5"  data-toggle="collapse">
+						  <h4 class="panel-title">
+							View Files
+                <i class="more-less glyphicon glyphicon-plus"></i>
+						  </h4>
+						</div>
+						<div id="collapse5" class="panel-collapse collapse">
+              <div class="panel-body">
+                <div ng-if="acptLdgmentFormDetails.lodgementDocuments.length>0" class="col-sm-12 col-xs-12 form-group fileNamesTable nocross">
+               <h3>Files Uploaded: </h3>
+                  <table class="table">
+                    <thead>
+                    <tr>
+                      <th class="title deloitteBlueHeading col-sm-6" style="border-right: 1px solid white!important;"> File Name </th>
+                      <th class="title deloitteBlueHeading col-sm-6"> File Type </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="file in acptLdgmentFormDetails.lodgementDocuments">
+                        <td><a ng-href="/acceptLodgement/retreiveFile/{{acptLdgmentFormDetails._id}}/{{file._id}}" target="_blank">{{file.fileName}}</a></td>
+                        <td class="col-sm-6" style="font-size: 90%;"> {{file.fileType}} </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  </div>
+              </div>
+						</div>
+					<div>
+				  </div>
+				</div>
+
+				<!--<span ng-if="acptLdgmentFormDetails" >
+					<div class="col-sm-12  col-xs-12" >
+						<label style="vertical-align:top">Document Submitted by Applicant </label>
+							<a ng-href="/lcRequest/retreiveFile/{{acptLdgmentFormDetails._id}}" target="_blank"><img src="/images/pdf.jpg"/></a>
+					</div>
+
+					<div class="col-sm-12  col-xs-12" ng-repeat= "n in range(1,acptLdgmentFormDetails.lodgementDocuments.length)">
+						<label style="vertical-align:top">Document Submitted by Beneficiary </label>
+							<a ng-href="/lcRequest/retreiveFile/{{acptLdgmentFormDetails._id}}/" target="_blank"><img src="/images/pdf.jpg"/></a>
+
+					</div>
+
+				</span>
+				-->
+				</div>
+				</div>
+				<div class="col-sm-12 col-xs-12" >
+					<h3 class="col-sm-offset-3">{{vm.submitMessage}}</h3>
+					<div class="col-sm-offset-4 form-group">
+						<button class="btn btn-inverse btn-lg btn-login" type="submit" ng-click=	"vm.submit(acptLdgmentFormDetails)" ng-disabled="!acptLdgmentFormDetails">
+						Accept
+						</button>
+						<button class="btn btn-inverse btn-lg btn-login" type="clear" ng-click="vm.clear()" ng-disabled="!acptLdgmentFormDetails">
+						Clear
+						</button>
+            <printpage></printpage>
+					</div>
+				</div>
+			</form>
+
+
+
+  </div>
+
+</div>

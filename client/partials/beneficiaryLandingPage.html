@@ -1,0 +1,499 @@
+<navigation></navigation>
+<div class="container">
+  <div class="row loginPanel">
+    <div>
+      <ul id="myTab" class="nav nav-tabs">
+        <li  class="active" ng-class="vm.setTab(0)"><a data-target="#createLodgement" data-toggle="tab">Upload Documents</a></li>
+        <!--<li ng-class="vm.setTab(1)"><a data-target="#acceptLodgement" data-toggle="tab">Accept Lodgement</a></li>-->
+      </ul>
+    </div>
+    <br>
+      <form class="form" name="vm.createLodgementForm" novalidate>
+          <div class="col-sm-6 col-xs-12">
+              <!-- Start of LC request Form -->
+              <!-- Client Details Start-->
+              <div class="form-group">
+                  <label>LC Number</label>
+                  <select class="form-control"
+                  ng-change='vm.fetchDetail(vm.shareLodgement)'
+                  ng-model="vm.shareLodgement"
+                  ng-options="item.lcNumber for item in vm.lodgementDetails"
+                  name="lcNumber"
+                  required>
+                  <option value="" disabled> -Select LC Number- </option>
+                  </select>
+              </div>
+          </div>
+          <hr>
+          <div class="col-sm-6 col-xs-12">
+            <!-- <select class="form-control"
+                ng-change='vm.populateAdvising(issueLcForm.advisingBankId.entity)'
+                ng-model="issueLcForm.advisingBankId.entity"
+                ng-options="item.name for item in advBanks"
+               name="Advising Bank"
+               required>
+              <option value="" disabled>- Select Advising Bank -</option>
+              </select> -->
+            <div class="form-group">
+                <label>Presenting Bank Name</label>
+                <select class="form-control"
+                    ng-model="vm.selectedPreBank"
+                    ng-options="item.name for item in vm.presentingBanks"
+                   name="Presenting Bank"
+                   required>
+                  <option value="" disabled>- Select Presenting Bank -</option>
+                  </select>
+                <!-- <input type="text"
+                class="form-control"
+                ng-model="vm.presentingBank.name" disabled /> -->
+            </div>
+            <div class="form-group">
+                <label>Presenting Bank Address</label>
+                <textarea type="text"
+                class="form-control"
+                ng-model="vm.selectedPreBank.address" disabled></textarea>
+            </div>
+          </div>
+          <div class="col-sm-6 col-xs-12">
+            <div class="form-group">
+                <label>Presenting Bank Branch</label>
+                <input type="text"
+                class="form-control"
+                ng-model="vm.selectedPreBank.branch" disabled />
+            </div>
+          </div>
+          <hr>
+          <div class="col-sm-6 col-xs-12">
+              <div class="form-group"
+              ng-class="{ 'has-error' : vm.createLodgementForm.billNumber.$invalid && !vm.createLodgementForm.billNumber.$pristine }">
+                  <label>Bill Number</label>
+                  <input type="text"
+                  class="form-control"
+                  ng-model="vm.shareLodgement.billNumber"
+                  ng-minlength="6" maxlength="30"
+                  required placeholder="Bill Number"
+                  ng-blur="vm.validateBillNumber(vm.shareLodgement.billNumber)"
+                  ng-focus="vm.removeUniqueMsg()"
+                  name="billNumber" />
+                  <h3 ng-show="vm.createLodgementForm.billNumber.$error.minlength">
+                    Bill Number should be between 6 and 30 characters.
+                  </h3>
+                  <h3 ng-show="vm.createLodgementForm.billNumber.$error.billNumberUnique">
+                    This Bill Number already exists in Database.
+                  </h3>
+              </div>
+              <div class="form-group"
+              ng-class="{ 'has-error' : vm.createLodgementForm.billQuantity.$invalid && !vm.createLodgementForm.billQuantity.$pristine }">
+                  <label>Billed Quantity</label>
+                  <input type="text"
+                  class="form-control"
+                  ng-model="vm.shareLodgement.billQuantity"
+                  ng-pattern="^([,.\d]+)([,.]\d{2})$"
+                  required placeholder="Bill Quantity"
+                  ng-change="vm.checkPoQuantity()"
+                  name="billQuantity" format-comma="decimal_no" />
+              </div>
+              <h3 ng-show="vm.createLodgementForm.billQuantity.$error.positiveInteger">Bill Quantity has to be greater than 0</h3>
+              <h3 ng-if="vm.createLodgementForm.billQuantity.checkPoQuantity == 1">
+                Bill Quantity is more than the PO Quantity ({{vm.shareLodgement.poQuantity}})
+              </h3>
+              <h3 ng-if="vm.createLodgementForm.billQuantity.checkPoQuantity == -1">
+                Bill Quantity is less than the PO Quantity ({{vm.shareLodgement.poQuantity}})
+              </h3>
+          </div>
+          <div class="col-sm-6 col-xs-12">
+              <div class="form-group"
+              ng-class="{ 'has-error' : vm.createLodgementForm.billAmount.$invalid && !vm.createLodgementForm.billAmount.$pristine }">
+                  <label>Bill Amount</label>
+                  <br>
+                  {{vm.shareLodgement.poCurrency}}&nbsp;<input type="text"
+                  class="form-control-Currency"
+                  ng-model="vm.shareLodgement.billAmount"
+                  ng-pattern="^([,.\d]+)([,.]\d{2})$"
+                  required placeholder="Bill Amount"
+                  ng-change="vm.checkBillAmount(vm.shareLodgement.billAmount, vm.shareLodgement.lcValue * (1 + ( (vm.shareLodgement.tolerancePercent)/100 ) ) )"
+                  name="billAmount" format-comma="decimal_yes"/>
+                  <h3 ng-show="vm.createLodgementForm.billAmount.$error.maxDecimalValue">
+                    Bill Amount cannot be more than LC Value + Tolerance <br> ({{vm.shareLodgement.poCurrency}}
+                     {{vm.shareLodgement.lcValue * (1 + ( (vm.shareLodgement.tolerancePercent)/100 ) ) | number : 2}})
+                  </h3>
+                  <h3 ng-show="vm.createLodgementForm.billAmount.$error.positiveInteger">Bill Amount has to be greater than 0</h3>
+                  <!-- max="{{vm.shareLodgement.lcValue * (1 + ( (vm.shareLodgement.tolerancePercent)/100 ) )}}" -->
+                  <!-- <h3 ng-show="vm.createLodgementForm.billAmount.$error.pattern">Bill Amount has to be a positive integer</h3> -->
+                  <!-- <h3 ng-show="vm.createLodgementForm.billAmount.$error.minlength">
+                    Bill Amount should be atleast 3 characters.
+                  </h3> -->
+              </div>
+              <div class="form-group">
+                  <ng-class="{ 'has-error' : vm.createLodgementForm.billLading.$invalid && !vm.createLodgementForm.billLading.$pristine }">
+                  <label>Bill Of Lading Number</label>
+                  <br>
+                  <input type="text"
+                  class="form-control"
+                  ng-model="vm.shareLodgement.billLading"
+                  required placeholder="Bill Of Lading"
+                  ng-minlength=6 maxlength=30
+                  name="billLading" />
+                  <h3 ng-show="vm.createLodgementForm.billLading.$error.minlength">
+                    Bill of Lading Number should be between 6 and 30 characters.
+                  </h3>
+              </div>
+          </div>
+          <hr>
+          <div class="col-sm-6 col-xs-12" style="text-align:center;">
+              <div class="form-group">
+                  <!-- <label>Upload invoice document</label>
+                  <button class="btn btn-inverse btn-lg btn-login"
+                  ngf-select="vm.selectInvoice($files)"
+                  accept="image/*,application/pdf"
+                  ngf-keep="true"
+                  ngf-model-options="{updateOn: 'change drop dropUrl paste', allowInvalid: false, debounce: 0}"
+                  ngf-pattern="'image/*,application/pdf'">
+                            Browse
+                  </button> -->
+                  <center><div ngf-drop="vm.selectInvoice($files)" ngf-select="vm.selectInvoice($files)" class="drop-box"
+                    ngf-model-invalid="invalidFiles"
+                    ngf-drag-over-class="'dragover'"
+                    ngf-keep="true"
+                    ngf-model-options="{updateOn: 'change drop dropUrl paste', allowInvalid: false, debounce: 0}"
+                    ngf-pattern="'image/*,application/pdf'">Click here or Drop invoice document to upload</div>
+                  </center>
+              </div>
+              <input type="hidden"
+              class="form-control"
+              name="hiddenInvoiceDoc"
+              ng-model="vm.invoiceFile"
+              required/>
+          </div>
+          <div class="col-sm-6 col-xs-12" style="text-align:center;">
+            <div class="form-group">
+              <center><div ngf-drop="vm.selectFiles($files)" ngf-select="vm.selectFiles($files)" class="drop-box"
+                name="myValidationBro"
+                ngf-model-invalid="invalidFiles"
+                ngf-drag-over-class="'dragover'" ngf-multiple="true"
+                ngf-keep="true"
+                ngf-model-options="{updateOn: 'change drop dropUrl paste', allowInvalid: false, debounce: 0}"
+                ngf-max-files="5"
+                ngf-pattern="'image/*,application/pdf'">Click here or Drop multiple beneficiary documents to upload<br>( Max 5 Files ) </div>
+            </div></center>
+            <!-- <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div> -->
+              <!-- <div class="form-group">
+                  <label>Upload beneficiary documents</label>
+                  <button class="btn btn-inverse btn-lg btn-login"
+                  ngf-select="vm.selectFiles($files)" multiple
+                  accept="image/*,application/pdf"
+                  ngf-pattern="'image/*,application/pdf'">
+                            Browse
+                  </button>
+              </div> -->
+              <input type="hidden"
+              class="form-control"
+              name="hiddenBeneficiaryDoc"
+              ng-model="vm.lodgementFiles[0]"
+              required/>
+          </div>
+          <!-- Uploaded files table -->
+          <div ng-if="vm.invoiceFile || vm.lodgementFiles" class="col-sm-offset-2 col-sm-8 col-xs-12 form-group fileNamesTable">
+            <h3>Files To Be Uploaded: </h3>
+            <table class="table">
+    					<thead>
+    					<tr>
+                <th class="title fileNameCol col-sm-6 deloitteBlueHeading" style="border-right: 1px solid white!important;"> File Name </th>
+                <th class="title fileTypeCol col-sm-6 deloitteBlueHeading"> File Type </th>
+    					</tr>
+    					</thead>
+    					<tbody>
+    					<tr ng-repeat="invoiceFile in vm.invoiceFileArray">
+                  <td class="col-sm-6"> {{invoiceFile.name}} </td>
+                  <td class="col-sm-6"> invoice
+                    <a href="javascript:void(0)"
+                    ng-click="vm.removeAttachement($index,'invoice')"
+                    class="cross"></a>
+                  </td>
+    					</tr>
+              <tr ng-repeat="file in vm.lodgementFiles track by $index">
+                  <td class="col-sm-6"> {{file.name}} </td>
+                  <td class="col-sm-6"> others
+                    <a href="javascript:void(0)"
+                    ng-click="vm.removeAttachement($index,'others')"
+                    class="cross"></a>
+                  </td>
+    					</tr>
+    					</tbody>
+    				</table>
+            <!-- <div class="title fileNameCol col-sm-6"> File Name </div>
+            <div class="title fileTypeCol col-sm-6"> File Type </div>
+            <div ng-repeat="invoiceFile in vm.invoiceFileArray">
+              <div class="fileNameCol col-sm-6"> {{invoiceFile.name}} </div>
+              <div class="fileTypeCol col-sm-6"> invoice </div>
+            </div>
+            <div ng-repeat="file in vm.lodgementFiles">
+              <div class="fileNameCol col-sm-6"> {{file.name}} </div>
+              <div class="fileTypeCol col-sm-6"> others </div>
+            </div> -->
+          </div>
+          <!-- Uploaded files table end -->
+
+      </form>
+  </div>
+  <br>
+  <br>
+  <a ng-show="vm.showAccordion" id="collapse-init" href="javascript:void(0)">
+      Expand All
+  </a>
+  <div ng-show="vm.showAccordion" class="row panel-group" id="accordion">
+    <div class="panel panel-default">
+      <div class="panel-heading" data-target="#collapse1" data-toggle="collapse">
+        <h4 class="panel-title">
+          Advising Bank Details
+          <i class="more-less glyphicon glyphicon-plus"></i>
+        </h4>
+      </div>
+      <div id="collapse1" class="panel-collapse collapse">
+			  <div class="panel-body">
+				<table class="table table-striped">
+					<thead>
+					<tr>
+						<th>Advising Bank Name</th>
+            <th>Advising Bank Branch</th>
+            <th>Advising Bank Address</th>
+						<th>LC Accepted Date</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+            <td>{{vm.shareLodgement.advisingBankId.name}}</td>
+            <td>{{vm.shareLodgement.advisingBankId.branch}}</td>
+            <td>{{vm.shareLodgement.advisingBankId.address}}</td>
+						<!-- <td>
+							<span ng-if="issueLcForm.poValue" >{{issueLcForm.poCurrency}}&nbsp;</span>
+							{{issueLcForm.poValue}}
+						</td> -->
+						<td>{{vm.shareLodgement.workflows[5].createdDateUTC | date: 'dd-MM-yyyy hh:mm:ss' : 'UTC'}}
+							<span ng-if="vm.shareLodgement.lcInitDate" >
+								UTC
+							</span>
+						</td>
+					</tr>
+          <tr>
+            <td colspan="4"> &nbsp;</td>
+          </tr>
+					</tbody>
+				</table>
+			  </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading" data-target="#collapse3" data-toggle="collapse">
+      <h4 class="panel-title">
+      Applicant / Beneficiary Information
+      <i class="more-less glyphicon glyphicon-plus"></i>
+      </h4>
+      </div>
+      <div id="collapse3" class="panel-collapse collapse">
+        <div class="panel-body">
+				<table class="table table-striped">
+					<thead>
+					<tr>
+            <th>Applicant Name</th>
+						<th>Applicant Account Number</th>
+            <th>Beneficiary Name</th>
+            <th>Beneficiary Account Number</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+            <td>{{vm.shareLodgement.buyerId.name}}</td>
+            <td>{{vm.shareLodgement.buyerId.accountDetail.accountNo}}</td>
+            <td>{{vm.shareLodgement.sellerId.name}}</td>
+            <td>{{vm.shareLodgement.sellerId.accountDetail.accountNo}}</td>
+					</tr>
+          <tr>
+						<td colspan="4"> &nbsp;</td>
+					</tr>
+					</tbody>
+          <!--  -->
+          <thead>
+					<tr>
+						<th colspan="2">Applicant Address</th>
+						<th colspan="2">Beneficiary Address</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+            <td colspan="2">{{vm.shareLodgement.buyerId.address}}</td>
+						<td colspan="2">{{vm.shareLodgement.sellerId.address}}</td>
+					</tr>
+          <tr>
+						<td colspan="4"> &nbsp;</td>
+					</tr>
+					</tbody>
+				</table>
+			  </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading" data-target="#collapse4" data-toggle="collapse">
+        <h4 class="panel-title">
+        Description of Goods and/or Services
+        <i class="more-less glyphicon glyphicon-plus"></i>
+        </h4>
+      </div>
+      <div id="collapse4" class="panel-collapse collapse">
+        <div class="panel-body">
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>PO Number</th>
+            <th>PO Item</th>
+            <th>PO Value</th>
+            <th>PO Initiation Date</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>{{vm.shareLodgement.poNumber}}</td>
+            <td>{{vm.shareLodgement.poItem}}</td>
+            <td>{{vm.shareLodgement.poCurrency}} {{vm.shareLodgement.poValue | number}}</td>
+            <td>{{vm.shareLodgement.poInitDate  | date: 'dd-MM-yyyy hh:mm:ss' : 'UTC'}}</td>
+          </tr>
+          <tr>
+            <td colspan="4"> &nbsp;</td>
+          </tr>
+          </tbody>
+          <thead>
+          <tr>
+            <th>PO Quantity</th>
+            <th>LC Duration</th>
+            <th>Tolerance Percentage</th>
+            <th>Usance Period</th>
+            <th>LC Expiry Date</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>{{vm.shareLodgement.poQuantity | number}}</td>
+            <td>{{vm.shareLodgement.lcDuration}}</td>
+            <td>{{vm.shareLodgement.tolerancePercent}} %</td>
+            <td>{{vm.shareLodgement.usancePeriod}}
+         <span ng-if="vm.shareLodgement.usancePeriod>0">Days From Date Of</span>
+             {{vm.shareLodgement.usancePeriodFrom }}
+             </td>
+            <td>{{vm.shareLodgement.lcExpirationDate | date: 'dd-MM-yyyy hh:mm:ss' : 'UTC' }}
+                       <span ng-if="vm.shareLodgement.lcExpirationDate" >
+                         UTC
+                       </span>
+                     </td>
+          </tr>
+          <tr>
+            <td colspan="5"> &nbsp;</td>
+          </tr>
+          </tbody>
+
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading" data-target="#collapse2" data-toggle="collapse">
+      <h4 class="panel-title">
+      Issuing Bank Details
+      <i class="more-less glyphicon glyphicon-plus"></i>
+      </h4>
+      </div>
+      <div id="collapse2" class="panel-collapse collapse">
+        <div class="panel-body">
+  			<table class="table table-striped">
+  				<thead>
+  				<tr>
+  					<th>Issuing Bank Name</th>
+            <th>Issuing Bank Branch</th>
+            <th>Issuing Bank Address</th>
+  					<th>LC Issued Date</th>
+  				</tr>
+  				</thead>
+  				<tbody>
+  				<tr>
+            <td>{{vm.shareLodgement.issuingBankId.name}}</td>
+            <td>{{vm.shareLodgement.issuingBankId.branch}}</td>
+            <td>{{vm.shareLodgement.issuingBankId.address}}</td>
+  					<td>{{vm.shareLodgement.lcInitDate | date: 'dd-MM-yyyy hh:mm:ss' : 'UTC'}}
+  						<span ng-if="vm.shareLodgement.lcInitDate" >
+  							UTC
+  						</span>
+  					</td>
+  				</tr>
+          <tr>
+						<td colspan="4"> &nbsp;</td>
+					</tr>
+  				</tbody>
+
+  			</table>
+  		  </div>
+      </div>
+    </div>
+
+    <!-- Document Required  Start-->
+    <div class="panel panel-default">
+        <div class="panel-heading" data-target="#collapse7" data-toggle="collapse">
+            <h4 class="panel-title">
+                        Documents Required
+                        <i class="more-less glyphicon glyphicon-plus"></i>
+            </h4>
+        </div>
+        <div id="collapse7" class="panel-collapse collapse">
+            <div class="panel-body">
+              <table class="table table-striped">
+              <tbody>
+                  <tr>
+                      <td colspan="4"><pre>{{vm.shareLodgement.lcDocsRequired}}</pre></td>
+                  </tr>
+                  <tr>
+                      <td colspan="4">&nbsp;</td>
+                  </tr>
+              </tbody>
+            </table>
+            </div>
+        </div>
+      </div>
+    <!-- Document Required End-->
+
+    <!-- MT 700  Start-->
+    <div class="panel panel-default">
+        <div class="panel-heading" data-target="#collapse6" data-toggle="collapse">
+            <h4 class="panel-title">
+                        MT 700 - Other Fields
+                        <i class="more-less glyphicon glyphicon-plus"></i>
+            </h4>
+        </div>
+        <div id="collapse6" class="panel-collapse collapse">
+            <div class="panel-body">
+              <table class="table table-striped">
+              <tbody>
+                  <tr>
+                      <td colspan="4"><pre>{{vm.shareLodgement.termsCondition}}</pre></td>
+                  </tr>
+                  <tr>
+                      <td colspan="4">&nbsp;</td>
+                  </tr>
+              </tbody>
+            </table>
+            </div>
+        </div>
+      </div>
+    <!-- MT 700 End-->
+
+  </div>
+  <!-- submit button -->
+  <h3 class="col-sm-offset-3 col-sm-8">{{vm.submitMessage}}</h3>
+  <div class="col-sm-offset-5 col-sm-4 col-xs-12 form-group">
+      <button class="btn btn-inverse btn-lg btn-login" type="submit"
+      ng-disabled="vm.createLodgementForm.$invalid" ng-click="vm.submit()">Submit</button>
+      <button class="btn btn-inverse btn-lg btn-login" type="cancel" ng-click="vm.clear()">Clear</button>
+      <printpage></printpage>
+  </div>
+</div>

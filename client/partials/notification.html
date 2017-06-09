@@ -1,0 +1,45 @@
+<navigation></navigation>
+<div class="container" >
+<div class="row loginPanel" ><br>
+<div class="col-sm-12 col-xs-12 form-group">
+	<h2 class="col-sm-offset-3"> Notifications From BlockChain </h2>
+	<br>
+
+	<div class="notification-style col-sm-offset-1 col-sm-10 " ng-repeat="arrayParent in notificationEntries">
+
+			<div class="col-sm-3" style="font-size: 85%;">
+				{{ arrayParent[0] | date: 'MMM dd yyyy HH:mm:ss ' : 'UTC' }}
+			</div>
+			<div class="col-sm-1" style="text-align:left">
+				<img align="left" style="width:100%"src="/images/arrow.png"/>
+			</div>
+			<div class="form-group  col-sm-8" style="text-align:left">
+					<div style="font-size: 90%;"><span  am-time-ago="arrayParent[0]"></span> </div>
+					<!--
+					<div ng-repeat="stage in notificatoinText" ng-if="stage[arrayParent.stage].length>0">
+						   <p>{{stage[arrayParent.stage].replace("{0}",arrayParent.poNumbers).replace("{1}",arrayParent.buyerName).replace("{2}",arrayParent.lcNumber)}} </p>
+					</div>
+					-->
+
+					<div ng-repeat="chlitem in arrayParent">
+
+						<div ng-repeat="stage in notificatoinText" ng-if="stage[chlitem.stage].length>0">
+							   <p style="font-style: italic;font-size: 80%;">{{stage[chlitem.stage].replace("{0}",chlitem.poNumbers).replace("{1}",chlitem.buyerName).replace("{2}",chlitem.lcNumber).replace("{3}",chlitem.fileName)}} </p>
+								 <a style="font-style: italic;font-size: 80%;" ng-show="chlitem.transactionHash" ui-sref="transactionid({transactionId:chlitem.transactionHash})">View Transaction Details</a>
+						</div>
+
+
+								<div ng-repeat="grandChlitem in chlitem">
+									<div ng-repeat="stage in notificatoinText" ng-if="stage[grandChlitem.stage].length>0">
+										   <p style="font-style: italic;font-size: 80%;">{{stage[grandChlitem.stage].replace("{0}",grandChlitem.poNumbers).replace("{1}",grandChlitem.buyerName).replace("{2}",grandChlitem.lcNumber)}} </p>
+											 <a style="font-style: italic;font-size: 80%;" ng-show="grandChlitem.transactionHash" ui-sref="transactionid({transactionId:grandChlitem.transactionHash})">View Transaction Details</a>
+									</div>
+								</div>
+
+
+					</div>
+			</div>
+	</div>
+</div>
+</div>
+</div>

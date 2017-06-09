@@ -1,0 +1,33 @@
+<navigation></navigation>
+<div class="container">
+<div class="row loginPanel">
+<div class="col-sm-4 col-sm-offset-4 col-xs-12">
+  <form>
+  <div class="form-group">
+          <label>LC Number</label>
+            <select class="form-control" ng-change='vm.fetchDetail(issueForm.poSelected)' ng-model="issueForm.poSelected" ng-options="item.po for item in poList">
+                <option value="">Select a PO </option>
+              </select>
+          </div>
+
+          <div class="form-group">
+            <label>LC Value</label>
+            <input type="text" id="lcValue" class="form-control"
+            ng-model="issueForm.lcValue"
+            required placeholder={{poDetail.ipfsImgHash}}
+            readonly="readonly" />
+          </div>
+          <div class="form-group">
+            <label>File link</label>
+            <input type="text" id="fileLink" class="form-control"
+            ng-model="issueForm.fileLink"
+            required placeholder={{poDetail.ipfsImgHash}}
+            readonly="readonly" />
+          </div>
+
+          <button class="btn btn-inverse btn-lg btn-login" type="submit"
+              ng-click="vm.submit(issueForm.poSelected)">
+                Submit
+          </button>
+  </form>
+</div>

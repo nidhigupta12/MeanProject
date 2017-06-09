@@ -1,0 +1,109 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <!-- <a class="navbar-brand" href="#">Project name</a> -->
+            <img class="navbar-brand" src="/images/deloitte-logo.png" />
+          </div>
+          <!-- <ul class="nav navbar-nav navbar-center">
+            <li><a><h2 class="white-text"> BlockChain Letter of Credit POC</h2></a></li>
+          </ul> -->
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li ng-show="navvm.inState('signup') || navvm.inState('logout')">
+                <a ui-sref= "login">Sign In</a>
+              </li>
+              <li>
+                <a href="javascript:void(0)"
+                ng-show="navvm.isLoggedIn" >Welcome <span class="deloitte-green">{{ navvm.currentUser.name }}</span>
+                </a>
+              </li>
+              <li id="homePage" ng-show="navvm.isLoggedIn">
+                <span class="hidden-home-text">Go To Home</span>
+                <a ui-sref="home"><i class="fa fa-home" style="font-size:1.5em;" aria-hidden="true"></i></a>
+              </li>
+              <li ng-show="navvm.isLoggedIn && navvm.ifRoleExists(100)">
+                  <a ui-sref="initiateLc">Request LC</a>
+              </li>
+              <li ng-click="navvm.setTabIdentifier(0)" ng-show="navvm.isLoggedIn && navvm.ifRoleExists(200)">
+                <a ui-sref="issueBankLndingPage">Issue LC</a>
+              </li>
+              <li ng-click="navvm.setTabIdentifier(0)" ng-show="navvm.isLoggedIn && navvm.ifRoleExists(200)">
+	              <a ui-sref="acceptLodgementPage">Accept Lodgement</a>
+              </li>
+              <li ng-click="navvm.setTabIdentifier(0)" ng-show="navvm.isLoggedIn && navvm.ifRoleExists(300)">
+                <a ui-sref="advisingBankLndingPage">Accept LC</a>
+              </li>
+              <li ng-show="navvm.isLoggedIn && navvm.ifRoleExists(400)">
+              <a ui-sref="beneficiaryLndingPage">Upload Documents</a>
+              </li>
+
+              <li ng-show="navvm.isLoggedIn && navvm.ifRoleExists(500)">
+                <a ui-sref="presentingLandingPage">Verify documents</a>
+              </li>
+              <!-- <li ng-show="navvm.isLoggedIn && !navvm.ifRoleExists(200)">
+                <a ui-sref="notification">Notifications</a>
+              </li> -->
+              <!-- <li ng-show="navvm.isLoggedIn && navvm.ifRoleExists(200"> -->
+              <li ng-show="navvm.isLoggedIn">
+                <a href="javascript:void(0)" data-toggle="dropdown" class="more-button"></a>
+                <ul class="dropdown-menu" style="padding:0px;">
+                  <li><a ui-sref="notification" class="deloitteBlueHeading dropdownList">Notification</a></li>
+                  <li><a ui-sref="dashboard" class="deloitteBlueHeading dropdownList">Dashboard</a></li>
+                  <li><a ui-sref="blockexplorer" class="deloitteBlueHeading dropdownList">Block Explorer</a></li>
+                </ul>
+              </li>
+              <!-- <li ng-show="navvm.isLoggedIn">
+                <a ui-sref="dashboard">Dashboard</a>
+              </li> -->
+              <!-- Commenting the Block Explorer -->
+              <!-- <li ng-show="navvm.isLoggedIn">
+                <a ui-sref="blockexplorer">Block Explorer</a>
+              </li> -->
+              <li id="logOut" ng-show="navvm.isLoggedIn">
+                <span class="hidden-logout-text">Logout</span>
+                <a ui-sref= "logout" ng-click="navvm.logout()"><i class="fa fa-sign-out"  style="font-size:1.5em;" aria-hidden="true"></i></a>
+              </li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
+<script>
+/*******************************
+* ACCORDION WITH TOGGLE ICONS
+*******************************/
+	function toggleIcon(e) {
+        $(e.target)
+            .prev('.panel-heading')
+            .find(".more-less")
+            .toggleClass('glyphicon-plus glyphicon-minus');
+    }
+    $('.panel-group').on('hidden.bs.collapse', toggleIcon);
+    $('.panel-group').on('shown.bs.collapse', toggleIcon);
+
+// collapse/expand all
+var active = true;
+
+$('#collapse-init').click(function () {
+    if (active) {
+        active = false;
+        $('.panel-collapse').collapse('show');
+        $('.panel-title').attr('data-toggle', '');
+        $(this).text('Collapse All');
+    } else {
+        active = true;
+        $('.panel-collapse').collapse('hide');
+        $('.panel-title').attr('data-toggle', 'collapse');
+        $(this).text('Expand All');
+    }
+});
+
+$('#accordion').on('show.bs.collapse', function () {
+    if (active) $('#accordion .in').collapse('hide');
+});
+</script>

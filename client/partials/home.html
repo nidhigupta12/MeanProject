@@ -1,0 +1,111 @@
+<navigation></navigation>
+<div class="col-sm-12 col-sm-offset-4">
+  <h1 style="text-align:center; vertical-align:middle;display: table-cell;">
+	<span>Welcome to Blockchain POC<br>
+		<h4>(Letter of Credit Business use case)</h4>
+	</span>
+  </h1>
+</div>
+
+
+</br>
+</br>
+  <!-- {{ vm.homePageData }} -->
+  <h2 class="col-sm-offset-5 col-sm-12 homePageTitle"
+  ng-hide="vm.homePageData.issuingBankId.length == 0
+  && vm.homePageData.advisingBankId.length == 0
+  && vm.homePageData.presentingBankId.length == 0
+  && vm.homePageData.sellerId.length == 0"
+  >
+  List Of Action Items
+  </h2>
+  <div class="outerDiv">
+    <div ng-repeat="(titleName,role) in vm.homePageData"
+    class="form-group fileNamesTable roleBorder col-sm-6"
+    ng-hide="( titleName == 'buyerId' ) || ( role.length == 0 )"
+    >
+    <h3 class="actionTitle">
+      <span ng-if=" titleName == 'issuingBankId' "> Issuing Bank Actionable Items </span>
+      <span ng-if=" titleName == 'sellerId' "> Beneficiary Actionable Items </span>
+      <!-- <span ng-if=" titleName == 'buyerId' "> Applicant Actionable Items </span> -->
+      <span ng-if=" titleName == 'presentingBankId' "> Presenting Bank Actionable Items </span>
+      <span ng-if=" titleName == 'advisingBankId' "> Advising Bank Actionable Items</span>
+    </h3>
+      <table class="table" ng-repeat="list in role track by $index">
+        <thead>
+        <tr>
+          <th class="title deloitteBlueHeading col-sm-6">
+            <span ng-if=" titleName == 'issuingBankId' ">
+              <span ng-if="$index == 0">
+                Issue LC
+              </span>
+              <span ng-if="$index == 1">
+                Accept Lodgement
+              </span>
+            </span>
+            <span ng-if=" titleName == 'advisingBankId' "> Accept LC </span>
+            <span ng-if=" titleName == 'sellerId' "> Upload Documents </span>
+            <span ng-if=" titleName == 'presentingBankId' "> Verify Documents </span>
+            <!-- <span ng-if=" titleName == 'acceptLodgment' "> Accept Lodgement </span> -->
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr ng-if=" list.length == 0 && titleName != 'buyerId' ">
+            <td>No actionable item is there. Enjoy :)</td>
+          </tr>
+          <tr ng-repeat="contract in list">
+            <td class="col-sm-6" ng-repeat="(key,value) in contract">
+              <span ng-switch="titleName">
+                  <span ng-switch-when="issuingBankId">
+                    <span ng-if="key == 'poNumber'">
+                      <a ui-sref="issueBankLndingPage({
+                          actionItem:'{{value}}'
+                        })">
+                      {{value}}
+                      </a>
+                    </span>
+                    <span ng-if="key == 'lcNumber'">
+                      <a ui-sref="acceptLodgementPage({
+                          actionItem:'{{value}}'
+                        })">
+                      {{value}}
+                      </a>
+                    </span>
+                  </span>
+                  <span ng-switch-when="advisingBankId">
+                    <a ui-sref="advisingBankLndingPage({
+                        actionItem:'{{value}}'
+                      })">
+                    {{value}}
+                    </a>
+                  </span>
+                  <span ng-switch-when="sellerId">
+                    <a ui-sref="beneficiaryLndingPage({
+                        actionItem:'{{value}}'
+                      })">
+                    {{value}}
+                    </a>
+                  </span>
+                  <span ng-switch-when="presentingBankId">
+                    <a ui-sref="presentingLandingPage({
+                        actionItem:'{{value}}'
+                      })">
+                    {{value}}
+                    </a>
+                  </span>
+                  <!-- <span ng-switch-when="acceptLodgment">
+                    <a ui-sref="acceptLodgementPage({
+                        actionItem:'{{value}}'
+                      })">
+                    {{value}}
+                    </a>
+                  </span> -->
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      {{list}}
+    </div>
+  </div>

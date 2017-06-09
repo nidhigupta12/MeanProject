@@ -1,0 +1,60 @@
+{
+  "name": "trade-finance-app",
+  "version": "1.0.0",
+  "description": "Trade Finance Application with Ethereum Blockchain",
+  "main": "app.js",
+  "dependencies": {
+    "app-root-path": "^2.0.1",
+    "bcrypt": "^1.0.2",
+    "bluebird": "^3.4.7",
+    "body-parser": "^1.14.1",
+    "bower": "^1.8.0",
+    "bs58": "^4.0.0",
+    "composable-middleware": "^0.3.0",
+    "connect-multiparty": "^2.0.0",
+    "ejs": "^2.3.4",
+    "express": "^4.13.3",
+    "express-jwt": "^5.1.0",
+    "formidable": "^1.1.1",
+    "fs": "0.0.1-security",
+    "gulp-concat": "^2.6.1",
+    "http": "0.0.0",
+    "https": "^1.0.0",
+    "ipfs-api": "^12.1.6",
+    "jsonwebtoken": "^7.2.1",
+    "mongoose": "^4.2.6",
+    "morgan": "^1.6.1",
+    "node-schedule": "^1.2.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1",
+    "socket.io": "^1.7.2",
+    "socket.io-client": "^1.7.3",
+    "web3": "^0.17.0-beta"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-filter": "^5.0.0",
+    "gulp-main-bower-files": "^1.6.1",
+    "gulp-ng-annotate": "^1.1.0",
+    "gulp-ng-html2js": "^0.2.0",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-uglify": "^1.2.0",
+    "gulp-watch": "^4.3.4"
+  },
+  "scripts": {
+    "postinstall": "bower install",
+    "test": "run test"
+  },
+  "keywords": [
+    "Blockchain",
+    "Ethereum",
+    "IPFS",
+    "MongoDb"
+  ],
+  "author": "Deloitte Consulting LLC",
+  "license": "ISC"
+}

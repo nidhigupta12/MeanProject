@@ -1,0 +1,314 @@
+<navigation></navigation>
+<div class="container">
+  <div class="row loginPanel">
+    <div>
+        <ul id="myTab" class="nav nav-tabs">
+          <li  class="active" ng-class="vm.setTab(0)"><a data-target="#acceptLC" data-toggle="tab">Accept LC</a></li>
+          <!--<li ng-class="vm.setTab(1)"><a data-target="#acceptLodgement" data-toggle="tab">Accept Lodgement</a></li>-->
+        </ul>
+    </div>
+    <div class="tab-content">
+      <div  ng-class="vm.setTab(0)" class="active tab-pane col-sm-12 col-xs-12" id="acceptLC">
+        <form>
+				<div class="col-sm-6 col-xs-12" >
+					<div class="form-group">
+						<label>Documentary Credit Number(DCN) </label>
+						<select class="form-control" ng-change='vm.fetchDetail(advBankFormDetails)' ng-model="advBankFormDetails" ng-options="item.lcNumber for item in advBankLCList">
+							  <option value="" disabled>- Select a LC -</option>
+						</select>
+					</div>
+          
+					<div class="form-group">
+
+					  <label>Currency Code / Amount </label><br>
+					   {{advBankFormDetails.poCurrency}}&nbsp;&nbsp;<input type="text" id="lcValue" class="form-control-Currency"
+					  ng-model="advBankFormDetails.lcValue| number:2"
+					  required disabled />
+
+					</div>
+
+					<!--<div class="form-group col-sm-offset-4">-->
+					   <!--<label>File link</label>
+					  <a href="//ipfs.io/ipfs/QmZw7CMrU99SrU2JpjJFdEAhFrTneoTEr1y1H7VrmNoRPn" target="_blank"><img align="middle" src="/images/pdf.jpg"/></a>
+					  -->
+						<!--	  <label style="vertical-align: top;">View File </label>-->
+						<!-- <a ng-href="/advBank/retreiveFile/{{advBankFormDetails.initiatorIpfcDocHash}}" target="_blank" >View File</a> -->
+							  <!-- <a ng-click="vm.displayPDF(advBankFormDetails)" href="javascript:void(0)" target="_blank"><img align="middle" src="/images/pdf.jpg"/></a> -->
+					 <!--   <a ng-href="/advBank/retreiveFile/{{advBankFormDetails._id}}" target="_blank" ><img align="middle" src="/images/pdf.jpg"/></a>-->
+
+					<!--</div>-->
+			</div>
+			 <div class="col-sm-12 col-xs-12" >
+				  <br>
+				  <br>
+          <a ng-show="vm.showAccordion" id="collapse-init" href="javascript:void(0)">
+              Expand All
+          </a>
+				  <div ng-show="vm.showAccordion" class="row panel-group" id="accordion">
+
+					<div class="panel panel-default">
+					  <div class="panel-heading" data-target="#collapse1" data-toggle="collapse">
+					  <h4 class="panel-title">
+					  Applicant / Beneficiary Information
+            <i class="more-less glyphicon glyphicon-plus"></i>
+					  </h4>
+					  </div>
+					  <div id="collapse1" class="panel-collapse collapse">
+					  <div class="panel-body">
+							<div class="col-sm-12 col-xs-12">
+								<span ng-if="advBankFormDetails.buyerId.name" >
+									 <table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Applicant Name </th>
+												<th>Applicant Address </th>
+												<th>Applicant Account Number </th>
+												<th>Beneficiary Name </th>
+												<th>Beneficiary Address </th>
+												<th>Beneficiary Account Number </th>
+												<!--<th>Applicant Email Address</th>-->
+											 </tr>
+										 </thead>
+										 <tbody>
+											<tr>
+												<td>{{advBankFormDetails.buyerId.name}}</td>
+												<td>{{advBankFormDetails.buyerId.address }}</td>
+												<td>{{advBankFormDetails.buyerId.accountDetail.accountNo}}</td>
+												<td>{{advBankFormDetails.sellerId.name}}</td>
+												<td>{{advBankFormDetails.sellerId.address}}</td>
+												<td>{{advBankFormDetails.sellerId.accountDetail.accountNo}}</td>
+												<!--<td>{{advBankFormDetails.buyerId.email}}</td>-->
+											</tr>
+                      <tr>
+                        <td colspan="6"> &nbsp;</td>
+                      </tr>
+											<!--<tr><td colspan="4">&nbsp;</td></tr>-->
+										</tbody>
+										<!--<thead>
+											<tr>
+												<th>Beneficiary Name (59)</th>
+												<th>Beneficiary Address (59)</th>
+												<th>Beneficiary Email Address </th>
+											 </tr>
+										 </thead>
+										 <tbody>
+											<tr>
+												<td>{{advBankFormDetails.sellerId.name}}</td>
+												<td>{{advBankFormDetails.sellerId.address}}</td>
+												<td>{{advBankFormDetails.sellerId.email}}</td>
+											</tr>
+										</tbody>-->
+										</table>
+								</span>
+							</div>
+						</div>
+					  </div>
+					</div>
+					<div class="panel panel-default">
+					  <div class="panel-heading" data-target="#collapse2" data-toggle="collapse">
+					  <h4 class="panel-title">
+					  Description of Goods and/or Services
+					  <i class="more-less glyphicon glyphicon-plus"></i>
+					  </h4>
+					  </div>
+					  <div id="collapse2" class="panel-collapse collapse">
+					  <div class="panel-body">
+						<div class="col-sm-12 col-xs-12">
+							<span ng-if="advBankFormDetails.buyerId.name" >
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th style="width:20%">PO Number</th>
+											<th style="width:20%">PO Item</th>
+											<th style="width:20%">PO Value</th>
+											<th style="width:20%">PO Quantity</th>
+											<th style="width:20%">PO Date </th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>{{advBankFormDetails.poNumber}}</td>
+											<td>{{advBankFormDetails.poItem }}</td>
+											<td>
+												<span ng-if="advBankFormDetails.poCurrency" >
+													{{advBankFormDetails.poCurrency}}&nbsp;
+												</span>
+												{{advBankFormDetails.poValue| number : 2}}</td>
+											<td>{{advBankFormDetails.poQuantity| number}}</td>
+											<td>{{ advBankFormDetails.poInitDate | date: 'dd-MM-yyyy hh:mm:ss' : 'UTC' }}
+												<span ng-if="advBankFormDetails.poInitDate" >
+													UTC
+												</span>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="5">&nbsp;</td>
+										</tr>
+								   </tbody>
+								   <thead>
+										<tr>
+											<th>LC Duration</th>
+											<th>Percentage Credit Amount Tolerance </th>
+											<th>Usance Period</th>
+                      <th>LC Expiration Date</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>{{advBankFormDetails.lcDuration}}
+												<span ng-if="advBankFormDetails.lcDuration>0">Days</span>
+											</td>
+											<td>{{advBankFormDetails.tolerancePercent}}
+												<span ng-if="advBankFormDetails.tolerancePercent>0">%</span>
+											</td>
+											<td>{{advBankFormDetails.usancePeriod}}
+												<span ng-if="advBankFormDetails.usancePeriod>0">Days From Date Of</span>
+                        {{advBankFormDetails.usancePeriodFrom }}
+											</td>
+                      <td>{{advBankFormDetails.lcExpirationDate | date: 'dd-MM-yyyy hh:mm:ss' : 'UTC' }}
+                        <span ng-if="advBankFormDetails.lcExpirationDate" >
+                          UTC
+                        </span>
+                      </td>
+										</tr>
+                    <tr>
+                      <td colspan="4"> &nbsp;</td>
+                    </tr>
+									</tbody>
+							</table>
+						   </span>
+						</div>
+						</div>
+					  </div>
+					</div>
+					<div class="panel panel-default">
+					  <div class="panel-heading" data-target="#collapse3" data-toggle="collapse">
+					  <h4 class="panel-title">
+							Issuing Bank Details
+							<i class="more-less glyphicon glyphicon-plus"></i>
+					  </h4>
+					  </div>
+					  <div id="collapse3" class="panel-collapse collapse">
+						  <div class="panel-body">
+							 <span ng-if="advBankFormDetails.buyerId.name" >
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th>Issuing Bank Name</th>
+											<th>Issuing Bank Address</th>
+											<th>Issuing Bank Branch</th>
+											<th>LC Initiation Date</th>
+										</tr>
+									</thead>
+									<tbody>
+									  <tr>
+										<td>{{advBankFormDetails.issuingBankId.entity}}</td>
+										<td>{{advBankFormDetails.issuingBankId.address}}</td>
+										<td>{{advBankFormDetails.issuingBankId.branch}}</td>
+										<td>{{advBankFormDetails.lcInitDate | date: 'dd-MM-yyyy hh:mm:ss' : 'UTC'}}
+											<span ng-if="advBankFormDetails.lcInitDate" >
+											UTC
+										</span>
+										</td>
+									  </tr>
+									  <tr>
+										<td colspan="4">&nbsp;</td>
+									  </tr>
+									</tbody>
+								   <!-- <thead>
+									<tr>
+										<th colspan="4" style="text-align:left">MT 700 - Other Fields</th>
+									</tr>
+								   </thead> -->
+								   <!-- <tbody>
+									  <tr>
+										<td colspan="4"><pre >{{advBankFormDetails.termsCondition}}</pre></td>
+									  </tr>
+								   </tbody> -->
+							</table>
+						   </span>
+						  </div>
+					  </div>
+					</div>
+          <div class="panel panel-default">
+					  <div class="panel-heading" data-target="#collapse4" data-toggle="collapse">
+					  <h4 class="panel-title">
+					   Documents Required
+					  <i class="more-less glyphicon glyphicon-plus"></i>
+					  </h4>
+					  </div>
+            <div id="collapse4" class="panel-collapse collapse">
+              <div class="panel-body">
+               <span ng-if="advBankFormDetails.buyerId.name" >
+                <table class="table table-striped">
+                  <!-- <thead>
+                  <tr>
+                    <th colspan="4" style="text-align:left">Documents Required</th>
+                  </tr>
+                   </thead> -->
+                   <tbody>
+                    <tr>
+                    <td colspan="4"><pre >{{advBankFormDetails.lcDocsRequired}}</pre></td>
+                    </tr>
+                    <tr>
+                      <td colspan="4"> &nbsp;</td>
+                    </tr>
+                   </tbody>
+              </table>
+               </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading" data-target="#collapse5" data-toggle="collapse">
+            <h4 class="panel-title">
+             MT 700 - Other Fields
+            <i class="more-less glyphicon glyphicon-plus"></i>
+            </h4>
+            </div>
+            <div id="collapse5" class="panel-collapse collapse">
+              <div class="panel-body">
+               <span ng-if="advBankFormDetails.buyerId.name" >
+                <table class="table table-striped">
+                  <!-- <thead>
+                  <tr>
+                    <th colspan="4" style="text-align:left">MT 700 - Other Fields</th>
+                  </tr>
+                   </thead> -->
+                   <tbody>
+                    <tr>
+                    <td colspan="4"><pre >{{advBankFormDetails.termsCondition}}</pre></td>
+                    </tr>
+                    <tr>
+                      <td colspan="4"> &nbsp;</td>
+                    </tr>
+                   </tbody>
+              </table>
+               </span>
+              </div>
+            </div>
+          </div>
+
+
+
+				 </div>
+			 </div>
+			<div class="col-sm-12 col-xs-12" >
+				<h3 class="col-sm-offset-4 col-sm-5">{{displayMessage}}</h3>
+				<div class="col-sm-offset-5 col-sm-4 form-group">
+				  <button class="btn btn-inverse btn-lg btn-login" type="submit" ng-click="vm.submit(advBankFormDetails)" ng-disabled="!advBankFormDetails" >
+					Accept
+				  </button>
+				  <button class="btn btn-inverse btn-lg btn-login" type="clear" ng-click="vm.clear()" ng-disabled="!advBankFormDetails" >
+					Clear
+				  </button>
+          <printpage></printpage>
+				</div>
+			</div>
+        </form>
+      </div>
+   </div>
+  </div>
+
+</div>

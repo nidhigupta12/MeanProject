@@ -1,0 +1,24 @@
+<navigation></navigation>
+<section class="artistinfo">
+   <div class = "artist cf" ng-model = "artists">
+
+   <a ui-sref="details({itemId:prevItem})"class="btn btn-left">&lt;</a>
+   <a ui-sref="details({itemId:nextItem})"class="btn btn-right">&gt;</a>
+  <!-- <a ui-sref="details({itemId:{{prevItem}}})" class="btn btn-left">&lt;</a> -->
+  <!-- <a ui-sref="details({itemId:{{nextItem}}})" class="btn btn-right">&gt;</a> -->
+
+    <h1>{{artists[whichItem].name}}</h1>
+    <div class="info">
+      <h3>{{artists[whichItem].reknown}}</h3>
+      <img ng-src ="http://ipfs.io/ipfs/{{artists[whichItem].ipfsImgHash}}"
+       alt="Photo of {{artists[whichItem].shortname}}"/>
+      <div class="bio">{{artists[whichItem].bio}}</div>
+    </div>
+  </div>
+<div>
+<a ui-sref= "upload">&laquo;Upload a Painting</a>
+</div>
+<div>
+<a ui-sref= "artistList">&laquo;Back to Search</a>
+</div>
+</section>

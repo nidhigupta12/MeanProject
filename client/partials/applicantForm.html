@@ -1,0 +1,254 @@
+<navigation></navigation>
+<style>
+
+</style>
+
+<div class="container ">
+	<div class="row loginPanel">
+    <div>
+        <ul id="myTab" class="nav nav-tabs">
+					<li  class="active" ng-class="vm.setTab(0)"><a data-target="#RequestLC" data-toggle="tab">Request LC</a></li>
+          <!-- <li  class="active" ng-class="vm.setTab(0)"><a data-target="#RequestLC" data-toggle="tab">Request LC</a></li> -->
+        </ul>
+    </div>
+
+
+    <div class="tab-content">
+      <div  ng-class="vm.setTab(0)" class="active tab-pane col-sm-12 col-xs-12" id="requestLC">
+            <!--<div class="col-sm-offset-1">
+                <p>Request For Letter of Credit</p></div>-->
+            <!--  Start of First Form -->
+            <div class="col-sm-6 col-xs-12">
+                <!-- Start of LC request Form -->
+                <!-- Client Details Start-->
+                <div class="form-group">
+                    <label>Applicant Name</label>
+                    <input type="text" id="buyerName" class="form-control" ng-model="appForm.buyerName" disabled />
+                </div>
+                <div class="form-group">
+                    <label>Applicant Address</label>
+                    <textarea type="text" id="BuyerAddress" class="form-control" ng-model="appForm.buyerAdd"  disabled></textarea>
+                </div>
+				<div class="form-group">
+                    <label>Applicant Account Number</label>
+                    <input type="text" id="buyerAccNumber" class="form-control" ng-model="appForm.buyerAccNumber" disabled />
+                </div>
+                <!-- Client Details End -->
+            </div>
+
+            <div class="col-sm-6 col-xs-12">
+                <div class="form-group">
+                    <label>Beneficiary Name</label>
+										<select class="form-control"
+										ng-change='vm.populateBenefiary(appForm.seller)'
+										ng-model="appForm.seller"
+										ng-options="item.name for item in appForm.sellers"
+										name="sellerName"
+										required>
+											<option value="" disabled>- Select Beneficiary -</option>
+											</select>
+                    <!-- <input type="text" id="sellerName" class="form-control" ng-model="appForm.sellerName"  disabled /> -->
+                </div>
+                <div class="form-group">
+                    <label>Beneficiary Address</label>
+                    <textarea type="email" name="sellerAddress" class="form-control formElements" ng-model="appForm.sellerAdd"  disabled >
+					</textarea>
+				</div>
+				<div class="form-group">
+                    <label>Beneficiary Account Number</label>
+                    <input type="text" id="sellerAccNumber" class="form-control" ng-model="appForm.sellerAccNumber"  disabled />
+                </div>
+            </div>
+            <hr/>
+            <!-- End of First Form -->
+            <!--  issuing bank -->
+            <div class="col-sm-6 col-xs-12">
+                <div class="form-group">
+                    <label>Issuing Bank Name</label>
+                    <!-- <input type="text" class="form-control" ng-model="appForm.issueBankName" disabled /> -->
+										<select class="form-control"
+										ng-change='vm.populateIssueBank(appForm.issBank)'
+										ng-model="appForm.issBank"
+										ng-options="item.issueBankName for item in appForm.issueBanks"
+										name="issueBankName"
+										required>
+											<option value="" disabled>- Select IssueBank -</option>
+											</select>
+                </div>
+                <div class="form-group">
+                    <label>Issuing Bank Address</label>
+                    <textarea type="text" class="form-control" ng-model="appForm.issueBankAddress"  disabled></textarea>
+                </div>
+
+            </div>
+            <div class="col-sm-6 col-xs-12">
+              <div class="form-group">
+                  <label>Issuing Bank Branch</label>
+                  <input type="text" class="form-control" ng-model="appForm.issueBankBranch" disabled></input>
+              </div>
+           </div>
+            <!--  issuing bank end-->
+            <hr/>
+            <!-- <form name="vm.requestLcForm"> -->
+              <!-- Start of Second Form -->
+              <form class="form" name="createLcRequestForm" novalidate>
+                <div class="col-sm-6 col-xs-12">
+                    <!-- Order Details Start-->
+                    <div class="form-group"
+                        ng-class="{ 'has-error' : createLcRequestForm.poNumber.$invalid && !createLcRequestForm.poNumber.$pristine }">
+                        <label>PO Number</label>
+                        <input type="text"
+                        class="form-control"
+                        name="poNumber"
+                        ng-minlength="6" maxlength="30"
+                        ng-model="appForm.poNumber"
+                        ng-blur="vm.validatePoNumber(appForm.poNumber)"
+                        ng-focus="vm.removeUniqueMsg()"
+												ng-pattern="/^[^\\]+$/"
+                        required placeholder="PO Number" />
+                    </div>
+                    <h3 ng-show="createLcRequestForm.poNumber.$error.poUnique">This PO Number already exists in Database.</h3>
+										<h3 ng-show="createLcRequestForm.poNumber.$error.minlength" >PO Number should be 6-30 characters.</h3>
+                    <h3 ng-show="createLcRequestForm.poNumber.$error.pattern" >Backslash ('\') is not allowed.</h3>
+                    <div class="form-group">
+                        <label>PO Date</label>
+                        <!-- <input type="date"
+                        class="form-control"
+                        ng-model="appForm.poInitDate"
+                        required placeholder="PO Date"></input> -->
+												<div>
+                          <datepicker date-format="dd MMM yyyy" date-max-limit="{{today.toString()}}">
+                          <input type="text" class="form-control" style="width:94%;"
+                           ng-model="appForm.poInitDate" placeholder="Click to Choose Date from Calendar" readonly />
+                        </datepicker><label style="position:absolute;right:12px;"><span class="fa fa-calendar" style="font-size:1.8em;"></span></label>
+											</div>
+                    </div>
+                    <div class="form-group">
+                        <label>PO Item</label>
+                        <input type="text"
+                        class="form-control"
+                        ng-model="appForm.poItem"
+                        required placeholder="PO Item"></input>
+                    </div>
+
+                    <div class="form-group"
+                        ng-class="{ 'has-error' : createLcRequestForm.poQuantity.$invalid && !createLcRequestForm.poQuantity.$pristine }">
+                        <label>PO Quantity</label>
+                        <input type="text"
+                        class="form-control"
+                        ng-model="appForm.poQuantity"
+                        name="poQuantity"
+                        ng-change="vm.checkMinValue(appForm.poQuantity,1,'poQuantity')"
+                        limit-to-max-min
+                        required placeholder="PO Quantity"
+												ng-pattern="^\d+(,\d+)*$"
+												format-comma="decimal_no" />
+                    </div>
+                        <h3 ng-show="createLcRequestForm.poQuantity.$error.minDecimalValue">PO Quantity should be greater than 0</h3>
+                        <h3 ng-show="createLcRequestForm.poQuantity.$error.pattern">PO Quantity does not allow decimal</h3>
+
+                    <div class="form-group"
+                        ng-class="{ 'has-error' : createLcRequestForm.poValue.$invalid && !createLcRequestForm.poValue.$pristine }">
+                        <label>PO Value</label>
+                        <br>
+                        $&nbsp;<input type="text"
+												style="width:97%"
+                        class="form-control-Currency"
+                        ng-model="appForm.poValue"
+                        name="poValue"
+												ng-change="vm.checkMinValue(appForm.poValue,100,'poValue')"
+												ng-pattern="^([,.\d]+)([,.]\d{2})$"
+                        required placeholder="PO Value" format-comma="decimal_yes" />
+                    </div>
+                    <h3 ng-show="createLcRequestForm.poValue.$error.minDecimalValue">PO Value should not be less than $100</h3>
+                    <h3 ng-show="createLcRequestForm.poValue.$error.pattern">PO Value cannot have special characters.</h3>
+                    <!-- <div class="form-group">
+                        <label>PO Currency</label>
+                        <input type="text" id="purchase_value" class="form-control" ng-model="appForm.poCurrency" required placeholder="PO Currency" />
+                    </div> -->
+                    <!-- Order Details End -->
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <label>DC Duration(1 to X Days)</label>
+                        <input type="number"
+                        class="form-control"
+                        name="lcDuration"
+                        min="1"
+                        ng-pattern="/^\d+$/"
+                        limit-to-max-min
+                        ng-model="appForm.lcDuration"
+                        required placeholder="DC Duration(1 to X Days)" />
+                    </div>
+                      <h3 ng-show="createLcRequestForm.lcDuration.$error.pattern">DC Duration does not allow decimals</h3>
+                    <div class="form-group">
+                        <label>Tolerance %</label>
+                        <input type="number"
+                        min="0"
+                        max="15"
+                        limit-to-max-min
+                        class="form-control"
+                        ng-model="appForm.tolerancePercent"
+                        required placeholder="Tolerance %(0 to 15) "></input>
+                    </div>
+                    <div class="form-group col-sm-6" style="padding-left:0px;">
+                        <label>Usance Period (days)</label>
+                        <input type="number"
+                        class="form-control"
+                        min="1"
+                        name="usancePeriod"
+                        ng-model="appForm.usancePeriod"
+                        required placeholder="Usance Period" />
+                    </div>
+										<div class="form-group  col-sm-6" style="padding-right:0px;"
+										ng-class="{ 'has-error' : vm.acceptLcForm.poNumber.$invalid && !vm.acceptLcForm.poNumber.$pristine }">
+                    	<label>From</label>
+                      <select class="form-control"
+                      name="usancePeriodFrom"
+											ng-model="appForm.usancePeriodFrom"
+                      required>
+												<option disabled selected value> -- Select an Option -- </option>
+												<option value="Lading">Date Of Lading</option>
+                        <option value="Expiry">Date Of Expiry</option>
+                      </select>
+                    </div>
+										<h3 ng-show="createLcRequestForm.usancePeriod.$error.min">Usance Period must be greater than 0</h3>
+                    <br>
+                    <div class="form-group">
+                      <label>Click to upload Document</label>
+                      <button class="btn btn-inverse btn-lg btn-login"
+											ngf-select="uploadFiles($files)"
+                      accept="image/*,application/pdf"
+                      ngf-pattern="'image/*,application/pdf'">
+                      Browse
+                      </button>
+                    </div>
+                    <input type="hidden"
+                    class="form-control"
+                    name="hiddenFilename"
+                    ng-model="appForm.message"
+                    required/>
+                    <h6>{{appForm.message}}</h6>
+                    <br>
+                </div>
+
+                <!-- End of Second Form -->
+								<div class="col-sm-12 col-xs-12" >
+									<h3 class="col-sm-offset-4 col-sm-5">{{submitData.message}} </h3>
+	                <div class="col-sm-4 col-sm-offset-5 col-xs-12 form-group">
+	                  <button class="btn btn-inverse btn-lg btn-login"
+	                  type="submit"
+	                  ng-disabled="createLcRequestForm.$invalid"
+	                  ng-click="vm.submit(appForm,$files)">
+	                  Submit
+	                  </button>
+	                  <button class="btn btn-inverse btn-lg btn-login" type="cancel" ng-click="vm.clear(appForm)">Clear</button>
+										<printpage></printpage>
+	              	</div>
+								</div>
+            </form>
+    </div>
+</div>
+</div>
+
+</div>

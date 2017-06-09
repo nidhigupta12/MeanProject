@@ -1,0 +1,36 @@
+<navigation></navigation>
+<section class= "artistpage">
+<div class = "search">
+  <h1> Artist Directory</h1>
+  <label>Search:</label>
+  <input ng-model="query" placeholder="Search for artists" autofocus="true"/>
+   <label class="formgroup">by:
+    <select ng-model="artistOrder">
+      <option value="name" selected="true">Name</option>
+      <option value="reknown">Reknown</option>
+    </select>
+ </label>
+ <label class = "formgroup">
+   <input type="radio" ng-model ="direction" name="direction" checked="true">Ascending</input>
+</label>
+<label class = "formgroup">
+  <input type="radio" ng-model ="direction" name="direction" value="reverse">Descending</input>
+</label>
+</div>
+<ul class ="artistlist">
+  <li ng-animate="'animate'" class= "artist cf" ng-repeat="item in artists | filter:query|orderBy:artistOrder:direction">
+    <!-- <a ui-sref="details({itemId:{{artists.indexOf(item)}}})"> -->
+    <a ui-sref="details({itemId:artists.indexOf(item)})">  
+    <!-- <img ng-src ="images/{{item.shortname}}_tn.jpg" alt="Photo of {{item.shortname}}"/> -->
+    <!-- Take image from IPFS, global URL -->
+    <img ng-src ="http://ipfs.io/ipfs/{{item.ipfsImgHash}}" alt="Photo of {{item.shortname}}"/>
+    <!-- Take image from IPFS, local IPFS URL -->
+    <!-- <img ng-src ="http://127.0.0.1:5001/api/v0/cat?arg={{item.ipfsImgHash}}" alt="Photo of {{item.shortname}}"/> -->
+    <div class="info">
+      <h2>{{item.name}}</h2>
+      <h3>{{item.reknown}}</h3>
+    </div>
+    </a>
+    </li>
+</ul>
+</section>

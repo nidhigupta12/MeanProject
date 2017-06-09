@@ -1,0 +1,317 @@
+<!--
+ - @author suraj@deloitte.com
+ - issueBank landing Page
+ -->
+<navigation></navigation>
+<div class="container">
+    <div class="row loginPanel">
+        <div>
+            <ul id="myTab" class="nav nav-tabs">
+                <li class="active" ng-class="vm.setTab(0)"><a data-target="#issueLC" data-toggle="tab">Issue LC</a></li>
+                <!-- <li ng-class="vm.setTab(1)"><a data-target="#acceptLodgement" data-toggle="tab">Accept Lodgement</a></li> -->
+            </ul>
+        </div>
+        <div class="tab-content">
+          <div ng-class="vm.setTab(0)" class="active tab-pane" id="issueLC">
+            <form name="vm.acceptLcForm">
+              <div class="col-sm-6 col-xs-12" >
+                      <div class="form-group" ng-class="{ 'has-error' : vm.acceptLcForm.poNumber.$invalid && !vm.acceptLcForm.poNumber.$pristine }">
+                      <label>PO Number</label>
+                      <select class="form-control"
+                      ng-change='vm.prepopulateLCDetails(issueLcForm)'
+                      ng-model="issueLcForm"
+                      ng-options="item.poNumber for item in lcRequestDetails"
+                      name="poNumber"
+                      required>
+                        <option value="" disabled>- Select PO -</option>
+                        </select>
+                      </div>
+
+                      <div class="form-group" ng-class="{ 'has-error' : vm.acceptLcForm.lcNumber.$invalid && !vm.acceptLcForm.lcNumber.$pristine }">
+                          <label>LC Number</label>
+                          <input type="text" class="form-control"
+                           ng-model="vm.lcDetails.lcNumber"
+                           ng-minlength="6" maxlength="30"
+                           required placeholder="LC Number"
+                           name = "lcNumber"
+                           ng-blur="vm.validateLcNumber(vm.lcDetails.lcNumber)"
+                           ng-focus="vm.removeUniqueMsg()"
+                           ng-pattern="/^[^\\]+$/"
+                           />
+                           <h3 ng-show="vm.acceptLcForm.lcNumber.$error.lcUnique">This LC Number already exists in Database.</h3>
+                           <h3 ng-show="vm.acceptLcForm.lcNumber.$error.minlength">LC Number should be between 6 and 30 characters.</h3>
+                           <h3 ng-show="vm.acceptLcForm.lcNumber.$error.pattern" >Backslash ('\') is not allowed.</h3>
+                      </div>
+					  <div class="form-group">
+                    <label>LC Creation Fee</label><br>
+                    {{issueLcForm.poCurrency}}&nbsp;&nbsp;<input type="text" class="form-control-Currency"
+                    ng-model="vm.lcDetails.lcFee | number:2"
+                    placeholder="LC Creation Fee" disabled />
+                </div>
+                      <div class="form-group" ng-class="{ 'has-error' : vm.acceptLcForm.lcValue.$invalid && !vm.acceptLcForm.lcValue.$pristine }">
+                          <label>Currency / Amount</label>
+		                      <br>
+                         <!-- $&nbsp;&nbsp;<input type="number" class="form-control-Currency"
+                           ng-model="vm.lcDetails.lcValue"
+                           required placeholder="LC Value"
+                           min="{{issueLcForm.poValue}}"
+                           limit-to-max-min
+                           name = "lcValue" step="0.01" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"
+                           name = "lcValue"
+                           ng-change="vm.changeLcFee(vm.lcDetails.lcValue)"
+                           />
+						   -->
+						   {{issueLcForm.poCurrency}}&nbsp;&nbsp;<input type="text" class="form-control-Currency"
+                           ng-model="vm.lcDetails.lcValue | number:2"
+                           placeholder="Currency / Amount"
+                           disabled />
+
+                      </div>
+
+                      <div class="form-group">
+                          <label>Advising Bank Name</label>
+                          <!-- <input type="text" class="form-control"
+                          ng-model="issueLcForm.advisingBankId.entity"
+                          placeholder="Advising Bank Name"
+                          disabled /> -->
+
+                          <select class="form-control"
+                              ng-change='vm.populateAdvising(issueLcForm.advisingBankId.entity)'
+                              ng-model="issueLcForm.advisingBankId.entity"
+                              ng-options="item.name for item in advBanks"
+                             name="Advising Bank"
+                             required>
+                            <option value="" disabled>- Select Advising Bank -</option>
+                            </select>
+
+                      </div>
+                      <div class="form-group">
+                          <label>Advising Bank Branch</label>
+                          <input type="text" class="form-control"
+                          ng-model="issueLcForm.advisingBankId.branch"
+                          placeholder="Advising Bank Branch"
+                          disabled />
+                      </div>
+                      <div class="form-group">
+                          <label>Advising Bank Address</label>
+                          <input type="text" class="form-control"
+                          ng-model="issueLcForm.advisingBankId.address"
+                          placeholder="Advising Bank Address"
+                          disabled />
+                    </div>
+
+                    <div class="form-group" ng-class="{ 'has-error' : vm.acceptLcForm.lcDocsRequired.$invalid && !vm.acceptLcForm.lcTerms.$pristine }">
+                        <label>Documents Required</label>
+                        <textarea type="text" class="form-control
+                         lcDocsRequired"
+                         ng-model="vm.lcDetails.lcDocsRequired"
+                         ng-minlength="10"
+                         maxlength="500"
+                          required placeholder="Documents Required"
+                          name = "lcDocsRequired"
+                          ></textarea>
+                          <h3 ng-show="vm.acceptLcForm.lcDocsRequired.$error.minlength">Documents Required should be atleast 10 characters.</h3>
+                    </div>
+
+              </div>
+              <div class="col-sm-6 col-xs-12">
+
+			    <div class="form-group">
+                          <label>Applicant Name</label>
+                          <input type="text" class="form-control"
+                           ng-model="issueLcForm.buyerId.name"
+                           placeholder="Applicant Name"
+                           disabled/>
+                </div>
+				<div class="form-group">
+                          <label>Applicant Address</label>
+                          <input type="text" class="form-control"
+                           ng-model="issueLcForm.buyerId.address"
+                           placeholder="Applicant Address"
+                           disabled/>
+                </div>
+				<div class="form-group">
+                          <label>Applicant Account Number</label>
+                          <input type="text" class="form-control"
+                           ng-model="issueLcForm.buyerId.accountDetail.accountNo"
+                           placeholder="Applicant Address"
+                           disabled/>
+                </div>
+				<div class="form-group">
+                          <label>Beneficiary Name</label>
+                          <input type="text" class="form-control"
+                           ng-model="issueLcForm.sellerId.name"
+                           placeholder="Beneficiary Name"
+                           disabled/>
+                </div>
+				<div class="form-group">
+                          <label>Beneficiary Address</label>
+                          <input type="text" class="form-control"
+                           ng-model="issueLcForm.sellerId.address"
+                           placeholder="Beneficiary Address"
+                           disabled/>
+                </div>
+				<div class="form-group">
+                          <label>Beneficiary Account Number</label>
+                          <input type="text" class="form-control"
+                           ng-model="issueLcForm.sellerId.accountDetail.accountNo"
+                           placeholder="Beneficiary Account Number"
+                           disabled/>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error' : vm.acceptLcForm.lcTerms.$invalid && !vm.acceptLcForm.lcTerms.$pristine }">
+                    <label>MT 700 - Other Fields</label>
+                    <textarea type="text" class="form-control
+                     termsAndConditions"
+                     ng-model="vm.lcDetails.lcTerms"
+                     ng-minlength="10"
+                     maxlength="50000"
+                      required placeholder="MT 700 - Other Fields"
+                      name = "lcTerms"
+                      ></textarea>
+                      <h3 ng-show="vm.acceptLcForm.lcTerms.$error.minlength">MT 700 - Other Fields should be atleast 10 characters.</h3>
+                </div>
+
+
+                </form>
+              </div>
+		 <div class="col-sm-12 col-xs-12" >
+			  <br>
+		<br>
+    <a ng-show="vm.lcDetails.showAccordion" id="collapse-init" href="javascript:void(0)">
+        Expand All
+    </a>
+		<div ng-show="vm.lcDetails.showAccordion" class="row panel-group" id="accordion">
+		  <div class="panel panel-default">
+			<div class="panel-heading" data-target="#poDetails" data-toggle="collapse">
+			  <h4 class="panel-title">
+				Description of Goods and/or Services
+				<i class="more-less glyphicon glyphicon-plus"></i>
+			  </h4>
+			</div>
+			<div id="poDetails" class="panel-collapse collapse">
+			  <div class="panel-body">
+
+				<table class="table table-striped">
+					<thead>
+					<tr>
+						<th style="width:20%">PO Number</th>
+						<th style="width:20%">PO Item</th>
+						<th style="width:20%">PO Value</th>
+						<th style="width:20%">PO Quantity</th>
+						<th style="width:20%">PO Date</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td>{{issueLcForm.poNumber}}</td>
+						<td>{{issueLcForm.poItem}}</td>
+						<td>
+							<span ng-if="issueLcForm.poValue>0" >{{issueLcForm.poCurrency}}&nbsp;</span>
+							{{issueLcForm.poValue | number : 2}}
+						</td>
+						<td>{{issueLcForm.poQuantity| number}}</td>
+						<td>{{issueLcForm.poInitDate | date: 'dd-MM-yyyy hh:mm:ss' : 'UTC'}}
+							<span ng-if="issueLcForm.poInitDate" >
+								UTC
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5"> &nbsp;</td>
+					</tr>
+					<thead>
+					<tr>
+						<th>LC Duration</th>
+						<th>Percentage Credit Amount Tolerance</th>
+						<th>Usance Period</th>
+						<th colspan="2">LC Fee Calculation (Formula)</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td >{{issueLcForm.lcDuration}}
+							<span ng-if="issueLcForm.lcDuration>0">Days</span>
+						</td>
+						<td >{{issueLcForm.tolerancePercent}}
+							<span ng-if="issueLcForm.tolerancePercent>0" >%</span>
+						</td>
+						<td >{{issueLcForm.usancePeriod}}
+							<span ng-if="issueLcForm.usancePeriod>0">Days From Date Of</span>
+              {{issueLcForm.usancePeriodFrom }}
+						</td>
+						<td colspan="2">
+							LC creation Fee = [LC value x (LC Duration + Usance Period) x Rate%]/365
+						</td>
+					</tr>
+          <tr>
+            <td colspan="4"> &nbsp;</td>
+          </tr>
+					</tbody>
+					</tbody>
+				</table>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		<div>
+
+      <span ng-if="issueLcForm" >
+			<div class="col-sm-4 col-sm-offset-4 col-xs-12" >
+				<center><label style="vertical-align:top">Document Submitted by Applicant </label></center>
+            			  <!-- <a ng-click="vm.fileView(issueLcForm)"
+                    href="javascript:void(0)"
+                    target="_blank">
+                      <img align="middle" src="/images/pdf.jpg"/>
+                    </a> -->
+                    <a ng-href="/lcRequest/retreiveFile/{{issueLcForm._id}}" target="_blank"><img style="margin-left:40%;" src="/images/pdf.jpg"/></a>
+            </div>
+          </span>
+
+	        <h3 class="col-sm-offset-4 col-sm-5">{{vm.lcDetails.message}}</h3>
+				  <div class="col-sm-4 col-sm-offset-4 col-xs-12 form-group"
+          style="padding-left:60px;">
+  					<button class="btn btn-inverse btn-lg btn-login" type="submit" ng-disabled="vm.acceptLcForm.$invalid" ng-click="vm.submit()">
+  					  Accept
+  					</button>
+  					<button class="btn btn-inverse btn-lg btn-login" type="clear" ng-click="vm.clear()">
+  					  Clear
+  					</button>
+            <printpage></printpage>
+				  </div>
+
+			  <!-- <div ng-class="vm.setTab(1)" class="tab-pane col-sm-6 col-xs-12" id="acceptLodgement">
+				  <form class="form" name="form" novalidate>
+					<div class="form-group">
+						<label>LC Number</label>
+						<select class="form-control" ng-change='vm.fetchDetail(issueForm.poSelected)' ng-model="issueForm.poSelected" ng-options="item.po for item in poList">
+					  <option value="">Select a LC Number </option>
+					</select>
+					</div>
+					<div class="form-group">
+						<label>Terms And Condition</label>
+						<textarea type="text" id="buyerName" class="form-control
+						 termsAndConditions"
+						 ng-model="issueForm.buyerName"
+						  required placeholder={{poDetail.ipfsImgHash}}
+						  disabled> </textarea>
+					</div>
+					<div class="form-group">
+						<label>File link    </label>
+						<a href="http://www.google.com">Click here to open file</a>
+					</div>
+					</br>
+				  </form>
+				  <div class="form-group col-sm-offset-4">
+					<button class="btn btn-inverse btn-lg btn-login" type="submit" ng-click="vm.submit(issueForm.poSelected)">
+					  Accept
+					</button>
+					<button class="btn btn-inverse btn-lg btn-login" type="clear" ng-click="vm.submit(issueForm.poSelected)">
+					  Clear
+					</button>
+				  </div>
+				</div> -->
+				</form>
+			</div>
+    </div>
+   </div>
+</div>

@@ -1,0 +1,325 @@
+<navigation></navigation>
+<div class="container" >
+<div class="row loginPanel" >
+<div class="col-sm-12 col-xs-12">
+  <form>
+  <div class="col-sm-12 col-xs-12">
+		Please select either of the below options <br>
+		  <div class="col-sm-offset-2">
+				<div class="col-sm-10">
+					<input type="radio" ng-change='vm.showRadioBtnDetail(dashboardForm,dashboardForm.radioBtnSelected)' ng-model="dashboardForm.radioBtnSelected" value="lcNumber">&nbsp;LC Number
+				</div>
+				<div class="col-sm-10">
+					<input type="radio" ng-change='vm.showRadioBtnDetail(dashboardForm,dashboardForm.radioBtnSelected,dashboardForm.startDate,dashboardForm.endDate)' ng-model="dashboardForm.radioBtnSelected" value="poNumber">&nbsp;PO Number
+				</div>
+				<div class="col-sm-10">
+					<div class="col-sm-2" style="padding:0px;">
+						<input type="radio" ng-change='vm.showRadioBtnDetail(dashboardForm,dashboardForm.radioBtnSelected,dashboardForm.startDate,dashboardForm.endDate)' ng-model="dashboardForm.radioBtnSelected" value="contractDate">&nbsp;Date <span class="fa fa-calendar" style="font-size:1.5em;"></span> <!--<p style="font-style: italic;font-size: 80%;">(select date range for PO initiated/processed)</p>-->
+					</div>
+					<div class="col-sm-3" ng-show='dashboardForm.radioBtnSelected == "contractDate"'>
+						<datepicker date-format="dd MMM yyyy" date-max-limit="{{today.toString()}}">
+                          <input type="text" class="form-control" ng-change='vm.showRadioBtnDetail(dashboardForm,dashboardForm.radioBtnSelected,dashboardForm.startDate,dashboardForm.endDate)'
+                           ng-model="dashboardForm.startDate" placeholder="start date" readonly />
+                        </datepicker>
+					</div>
+					<div class="col-sm-1">&nbsp</div>
+					<div class="col-sm-3" ng-show='dashboardForm.radioBtnSelected == "contractDate"'>
+						<datepicker date-format="dd MMM yyyy" date-max-limit="{{today.toString()}}">
+                          <input type="text" class="form-control" ng-change='vm.showRadioBtnDetail(dashboardForm,dashboardForm.radioBtnSelected,dashboardForm.startDate,dashboardForm.endDate)'
+                           ng-model="dashboardForm.endDate" placeholder="end date" readonly />
+                        </datepicker>
+					</div>
+					<div class="col-sm-1">&nbsp;</div>
+				</div>
+			  <br>
+			  <br>
+		 </div>
+	<div class="col-sm-12 col-xs-12">
+		<div class="col-sm-5 col-xs-5">
+			<span ng-if="dashboardForm.radioBtnSelected=='poNumber'">
+				<label>Please select PO Number to retrieve its Status</label>
+					<select class="form-control" ng-change='vm.showLCDetail(dashboardForm.lcSelected)' ng-model="dashboardForm.lcSelected" ng-options="lcDetail.poNumber for lcDetail in dashboards">
+							<option value="1">Select PO Number</option>
+					</select>
+			</span>
+			<span ng-if="dashboardForm.radioBtnSelected=='lcNumber'">
+				<label>Please select LC Number to retrieve its Status</label>
+					<select class="form-control" ng-change='vm.showLCDetail(dashboardForm.lcSelected)' ng-model="dashboardForm.lcSelected" ng-options="lcDetail.lcNumber for lcDetail in dashboards">
+							<option value="1">Select LC Number</option>
+					</select>
+			</span>
+
+			<span ng-if="dashboardForm.radioBtnSelected=='contractDate' && dashboardForm.startDate && dashboardForm.endDate">
+				<label>Please select PO Number to retrieve its Status <p style="font-style: italic;font-size: 60%;"> (PO initiated/processed between {{dashboardForm.startDate | date: 'MMM dd yyyy': 'UTC' }} and {{dashboardForm.endDate | date: 'MMM dd yyyy': 'UTC' }} )</p> </label>
+					<select class="form-control" ng-change='vm.showLCDetail(dashboardForm.lcSelected)' ng-model="dashboardForm.lcSelected" ng-options="lcDetail.poNumber for lcDetail in dashboards">
+							<option value="1">Select LC Number</option>
+					</select>
+			</span>
+		</div>
+		<div class="col-sm-7 col-xs-7">&nbsp;</div>
+	</div>
+	<div class="col-sm-12 col-xs-12">
+		<div class="form-group"  ng-hide="vm.lcDetailsEnabled">
+
+
+			<div><br>&nbsp;</div>
+			<div class="col-sm-12 form-group">
+				<!--
+				<div class="col-sm-2 text-align-center" ng-repeat= "n in range(1,dashboardForm.lcSelected.workflows.length/2)">
+						 <span ng-if="dashboardForm.lcSelected.workflows[0].stage==100">
+						 </span>
+						<img align="middle" src="/images/statusGreen.jpg"/>
+				</div>
+				<div class="col-sm-2 text-align-center" ng-repeat="n in range(1,((12-dashboardForm.lcSelected.workflows.length+1)/2))">
+					 <img align="middle" src="/images/statusOrange.jpg"/>
+				</div>
+				-->
+
+				<div ng-repeat="item in dashboardForm.lcSelected.workflows">
+					<div class="col-sm-2 text-align-center"  ng-if="item.stage==100">
+						&nbsp;&nbsp;<img align="middle" style="height: 123px;width: 120px;margin-top: -28px;margin-left: 56px;" src="/images/applicantGreen.png"/>
+					</div>
+					<div class="col-sm-2 text-align-center"  ng-if="item.stage==200">
+						<img align="middle" style="height:120px;width:129px;margin:-7px;" src="/images/issuingBankGreen.png"/>
+					</div>
+					<div class="col-sm-2 text-align-center"  ng-if="item.stage==300">
+						<img align="middle" style="height:120px;width:140px;margin:0px;" src="/images/advisoryBankGreen.png"/>
+					</div>
+					<div class="col-sm-2 text-align-center"  ng-if="item.stage==400">
+						<img align="middle" style="height:113px;width:150px;margin:1px;" src="/images/beneficiaryGreen.png"/>
+					</div>
+					<div class="col-sm-2 text-align-center"  ng-if="item.stage==500">
+						<img align="middle" style="height:123px;width:154px" src="/images/presentingBankGreen.png"/>
+					</div>
+					<div class="col-sm-2 text-align-center"  ng-if="item.stage==600">
+						<img align="middle" style="height:110px;width:150px" src="/images/issuingBankGreen.png"/>
+					</div>
+				</div>
+
+				<!-- DIV for displaying non green images -->
+
+				<div class="col-sm-2 text-align-center" ng-if="dashboardForm.lcSelected.workflows.length<2">
+					 <img align="middle" style="height: 125px;width: 120px;margin-top: -5px;margin-left: 56px;"  src="/images/applicant.png"/>
+				</div>
+				<div class="col-sm-2 text-align-center" ng-if="dashboardForm.lcSelected.workflows.length<4">
+					 <img align="middle" style="height:120px;width:129px;margin:-7px;"  src="/images/issuingBank.png"/>
+				</div>
+				<div class="col-sm-2 text-align-center" ng-if="dashboardForm.lcSelected.workflows.length<6">
+					 <img align="middle" style="height:112px;width:150px;margin:2px;"  src="/images/advisoryBank.png"/>
+				</div>
+				<div class="col-sm-2 text-align-center" ng-if="dashboardForm.lcSelected.workflows.length<8">
+					 <img align="middle" style="height:110px;width:150px;margin:-3px;"  src="/images/beneficiary.png"/>
+				</div>
+				<div class="col-sm-2 text-align-center" ng-if="dashboardForm.lcSelected.workflows.length<10 ">
+					 <img align="middle" style="height:113px;width:150px;margin:1px;"  src="/images/presentingBank.png"/>
+				</div>
+				<div class="col-sm-2 text-align-center" ng-if="dashboardForm.lcSelected.workflows.length<12">
+					 <img align="middle" style="height:117px;width:130px;margin:-4px;"  src="/images/issuingBank.png"/>
+				</div>
+
+
+			</div>
+      <div class=" col-sm-12 form-group" style="left:35px;">
+				<label class="col-sm-2 text-align-center" >Initiate LC Request</label>
+				<label class="col-sm-2 text-align-center" >Verify and Issue LC</label>
+				<label class="col-sm-2 text-align-center" >Verify and Forward LC</label>
+				<label class="col-sm-2 text-align-center" >Bill and Proof Documents Uploaded</label>
+				<label class="col-sm-2 text-align-center" >Bill and Proof Documents verified</label>
+				<label class="col-sm-2 text-align-center" >Bill and Proof Documents Lodged</label>
+	<!-- <div ng-repeat="states in dashboardForm.lcSelected.workflows ">
+      <span ng-if="((states.stage)%100)==0" >
+        <a class="col-sm-2 text-align-center"  ui-sref="transactionid({transactionId:states.transactionHash})"  style="padding-top:20px;">View Transaction Details</a>
+      </span>
+  </div> -->
+			</div>
+			<!-- <div ng-repeat="states in dashboardForm.lcSelected.workflows " style="margin-left:63px;">
+          <span ng-if="((states.stage)%100)==0" >
+
+				<label class="col-sm-2 text-align-center" ><br> UTC <br> {{ states.createdDateUTC | date: 'MMM d, y H:mm:ss' : 'UTC' }}
+				</label>
+      </span>
+			</div> -->
+		</div>
+	</div>
+
+   </form>
+ </div>
+
+<div class="col-sm-12 col-xs-12">
+<br><br><br>
+	<div ng-show="vm.showAccordion" class="row panel-group" id="detailsAccordion">
+	<div class="panel panel-default" data-target="#poDetails" data-toggle="collapse">
+			<div class="panel-heading">
+			  <h4 class="panel-title">
+				Contract Details
+        <i class="more-less glyphicon glyphicon-plus"></i>
+			  </h4>
+
+			</div>
+				<div id="poDetails" class="panel-collapse collapse">
+
+				  <div class="dashboard-style" ng-repeat="states in dashboardForm.lcSelected.workflows" ng-if="states.stage%100==0">
+						<span ng-if="states.stage==100">
+							<label class="dashboard-style-header">On Contract Created</label>
+							<br>
+							<label class="h6">Timestamp: </label>
+								<!--<label >  {{vm.toTimestamp(states.createdDateUTC)}} </label>-->
+								<label >{{ states.createdDateUTC | date: 'MMM d, y H:mm:ss' : 'UTC' }} UTC</label>
+							<br>
+							<label class="h6">Sender: </label>
+								<label>{{dashboardForm.lcSelected.buyerId.name}}</label>
+							<br>
+							<label class="h6">Receiver: </label>
+								<label>{{dashboardForm.lcSelected.issuingBankId.name}}</label>
+							<br>
+							<label class="h6">State: </label>
+								<label>0</label>
+							<br>
+							<label class="h6">PO Number Contract: </label>
+								<label>{{dashboardForm.lcSelected.poNumber}}</label>
+							<br>
+							<label class="h6">Name: </label>
+								<label>{{dashboardForm.lcSelected.initiaterFileName}}</label>
+							<br>
+							<label class="h6">Hash: </label>
+								<label>{{dashboardForm.lcSelected.initiatorIpfcDocHash}}</label>
+							<br>
+							<label class="h6">File Count: </label>
+								<label>{{dashboardForm.lcSelected.initiaterFileName.split(',').length}}</label>
+							<br>
+							<label class="h6">Transaction Hash: </label>
+								<a ui-sref="transactionid({transactionId:states.transactionHash})">{{states.transactionHash}}</a>
+						</span>
+						<span ng-if="states.stage==200">
+							<label class="dashboard-style-header">On Issue LC</label>
+							<br>
+							<label class="h6">Timestamp: </label>
+								<label >{{ states.createdDateUTC | date: 'MMM d, y H:mm:ss' : 'UTC' }} UTC</label>
+							<br>
+							<label class="h6">Sender: </label>
+								<label>{{dashboardForm.lcSelected.issuingBankId.name}}</label>
+							<br>
+							<label class="h6">Receiver: </label>
+								<label>{{dashboardForm.lcSelected.advisingBankId.name}}</label>
+							<br>
+							<label class="h6">State: </label>
+								<label>1</label>
+							<br>
+							<label class="h6">LC Number Contract: </label>
+								<label>{{dashboardForm.lcSelected.lcNumber}}</label>
+							<br>
+							<label class="h6">PO Number Contract: </label>
+								<label>{{dashboardForm.lcSelected.poNumber}}</label>
+							<br>
+							<label class="h6">Transaction Hash: </label>
+								<a ui-sref="transactionid({transactionId:states.transactionHash})">{{states.transactionHash}}</a>
+						</span>
+						<span ng-if="states.stage==300">
+							<label class="dashboard-style-header">On Accept</label>
+							<br>
+							<label class="h6">Timestamp: </label>
+								<label >{{ states.createdDateUTC | date: 'MMM d, y H:mm:ss' : 'UTC' }} UTC</label>
+							<br>
+							<label class="h6">Sender: </label>
+								<label>{{dashboardForm.lcSelected.advisingBankId.name}}</label>
+							<br>
+							<label class="h6">Receiver: </label>
+								<label>{{dashboardForm.lcSelected.sellerId.name}}</label>
+							<br>
+							<label class="h6">State: </label>
+								<label>2</label>
+							<br>
+							<label class="h6">LC Number Contract: </label>
+								<label>{{dashboardForm.lcSelected.lcNumber}}</label>
+							<br>
+							<label class="h6">PO Number Contract: </label>
+								<label>{{dashboardForm.lcSelected.poNumber}}</label>
+							<br>
+							<label class="h6">Transaction Hash: </label>
+								<a ui-sref="transactionid({transactionId:states.transactionHash})">{{states.transactionHash}}</a>
+						</span>
+
+            <!-- Changes for Drop 2 Start-->
+            <span ng-if="states.stage==400">
+							<label class="dashboard-style-header">Upload Documents</label>
+							<br>
+							<label class="h6">Timestamp: </label>
+								<label >{{ states.createdDateUTC | date: 'MMM d, y H:mm:ss' : 'UTC' }} UTC</label>
+							<br>
+							<label class="h6">Sender: </label>
+								<label>{{dashboardForm.lcSelected.sellerId.name}}</label>
+							<br>
+							<label class="h6">Receiver: </label>
+								<label>{{dashboardForm.lcSelected.presentingBankId.name}}</label>
+							<br>
+							<label class="h6">State: </label>
+								<label>3</label>
+							<br>
+							<label class="h6">LC Number Contract: </label>
+								<label>{{dashboardForm.lcSelected.lcNumber}}</label>
+							<br>
+							<label class="h6">PO Number Contract: </label>
+								<label>{{dashboardForm.lcSelected.poNumber}}</label>
+							<br>
+							<label class="h6">Transaction Hash: </label>
+								<a ui-sref="transactionid({transactionId:states.transactionHash})">{{states.transactionHash}}</a>
+						</span>
+
+            <span ng-if="states.stage==500">
+							<label class="dashboard-style-header">Verify documents</label>
+							<br>
+							<label class="h6">Timestamp: </label>
+								<label >{{ states.createdDateUTC | date: 'MMM d, y H:mm:ss' : 'UTC' }} UTC</label>
+							<br>
+							<label class="h6">Sender: </label>
+								<label>{{dashboardForm.lcSelected.presentingBankId.name}}</label>
+							<br>
+							<label class="h6">Receiver: </label>
+								<label>{{dashboardForm.lcSelected.issuingBankId.name}}</label>
+							<br>
+							<label class="h6">State: </label>
+								<label>4</label>
+							<br>
+							<label class="h6">LC Number Contract: </label>
+								<label>{{dashboardForm.lcSelected.lcNumber}}</label>
+							<br>
+							<label class="h6">PO Number Contract: </label>
+								<label>{{dashboardForm.lcSelected.poNumber}}</label>
+							<br>
+							<label class="h6">Transaction Hash: </label>
+								<a ui-sref="transactionid({transactionId:states.transactionHash})">{{states.transactionHash}}</a>
+						</span>
+
+            <span ng-if="states.stage==600">
+              <label class="dashboard-style-header">Lodge documents</label>
+              <br>
+              <label class="h6">Timestamp: </label>
+                <label >{{ states.createdDateUTC | date: 'MMM d, y H:mm:ss' : 'UTC' }} UTC</label>
+              <br>
+              <label class="h6">Sender: </label>
+                <label>{{dashboardForm.lcSelected.issuingBankId.name}}</label>
+              <br>
+              <label class="h6">Receiver: </label>
+                <label>{{dashboardForm.lcSelected.buyerId.name}}</label>
+              <br>
+              <label class="h6">State: </label>
+                <label>5</label>
+              <br>
+              <label class="h6">LC Number Contract: </label>
+                <label>{{dashboardForm.lcSelected.lcNumber}}</label>
+              <br>
+              <label class="h6">PO Number Contract: </label>
+                <label>{{dashboardForm.lcSelected.poNumber}}</label>
+              <br>
+              <label class="h6">Transaction Hash: </label>
+                <a ui-sref="transactionid({transactionId:states.transactionHash})">{{states.transactionHash}}</a>
+            </span>
+
+            <!-- Changes for Drop 2 Ends -->
+
+			</div> <!-- end ng-repeat-->
+		  </div>
+		  </div>
+		  </div>
+		 </div>
+		 </div>
